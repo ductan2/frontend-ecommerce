@@ -21,15 +21,6 @@ const Footer = () => {
                                     Nest Mart
                                  </span>
                               </p>
-                              <form className="form-subcriber d-flex">
-                                 <input
-                                    type="email"
-                                    placeholder="Your emaill address"
-                                 />
-                                 <button className="btn" type="submit">
-                                    Subscribe
-                                 </button>
-                              </form>
                            </div>
                            <img
                               src="/assets/imgs/banner/banner-9.png"
@@ -247,64 +238,6 @@ const Footer = () => {
                            </li>
                            <li>
                               <a href="#">Careers</a>
-                           </li>
-                        </ul>
-                     </div>
-                     <div
-                        className="footer-link-widget col  wow animate__animated animate__fadeInUp"
-                        data-wow-delay=".2s"
-                     >
-                        <h4 className="widget-title ">Account</h4>
-                        <ul className="footer-list  mb-sm-5 mb-md-0">
-                           <li>
-                              <a href="#">Sign In</a>
-                           </li>
-                           <li>
-                              <a href="#">View Cart</a>
-                           </li>
-                           <li>
-                              <a href="#">My Wishlist</a>
-                           </li>
-                           <li>
-                              <a href="#">Track My Order</a>
-                           </li>
-                           <li>
-                              <a href="#">Help Ticket</a>
-                           </li>
-                           <li>
-                              <a href="#">Shipping Details</a>
-                           </li>
-                           <li>
-                              <a href="#">Compare products</a>
-                           </li>
-                        </ul>
-                     </div>
-                     <div
-                        className="footer-link-widget col  wow animate__animated animate__fadeInUp"
-                        data-wow-delay=".3s"
-                     >
-                        <h4 className="widget-title ">Corporate</h4>
-                        <ul className="footer-list  mb-sm-5 mb-md-0">
-                           <li>
-                              <a href="#">Become a Vendor</a>
-                           </li>
-                           <li>
-                              <a href="#">Affiliate Program</a>
-                           </li>
-                           <li>
-                              <a href="#">Farm Business</a>
-                           </li>
-                           <li>
-                              <a href="#">Farm Careers</a>
-                           </li>
-                           <li>
-                              <a href="#">Our Suppliers</a>
-                           </li>
-                           <li>
-                              <a href="#">Accessibility</a>
-                           </li>
-                           <li>
-                              <a href="#">Promotions</a>
                            </li>
                         </ul>
                      </div>

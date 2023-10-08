@@ -10,9 +10,9 @@ export const Banner = () => {
       <>
          <IntroPopup />
          <div>
-            <section className="home-slider style-2 position-relative mb-50">
+            <section className="home-slider style-2 position-relative">
                <div className="container">
-                  <div className="row">
+                  <div className="row md-w-100vw">
                      <div className="col-xl-8 col-lg-12">
                         <div className="home-slide-cover">
                            <Intro />
@@ -32,10 +32,10 @@ export const Banner = () => {
                                  </span>
                               </h2>
                               <Link to="/shop">
-                                 <a className="btn btn-xs">
+                                 <div className="btn btn-xs">
                                     Shop Now{" "}
                                     <i className="fi-rs-arrow-small-right"></i>
-                                 </a>
+                                 </div>
                               </Link>
                            </div>
                         </div>

@@ -35,6 +35,7 @@ const Intro = () => {
                   style={{
                      backgroundImage:
                         "url(assets/imgs/slider/slider-5.png)",
+                        backgroundSize:"cover"
                   }}
                >
                   <div className="slider-content">
@@ -43,18 +44,9 @@ const Intro = () => {
                         <br />
                         amazing deals
                      </h1>
-                     <p className="mb-65">
+                     <p className="mb-20">
                         Sign up for the daily newsletter
                      </p>
-                     <form className="form-subcriber d-flex">
-                        <input
-                           type="email"
-                           placeholder="Your emaill address"
-                        />
-                        <button className="btn" type="submit">
-                           Subscribe
-                        </button>
-                     </form>
                   </div>
                </div>
             </SwiperSlide>
@@ -75,15 +67,7 @@ const Intro = () => {
                      <p className="mb-65">
                         Save up to 50% off on your first order
                      </p>
-                     <form className="form-subcriber d-flex">
-                        <input
-                           type="email"
-                           placeholder="Your emaill address"
-                        />
-                        <button className="btn" type="submit">
-                           Subscribe
-                        </button>
-                     </form>
+              
                   </div>
                </div>
             </SwiperSlide>

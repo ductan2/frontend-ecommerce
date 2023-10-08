@@ -12,23 +12,6 @@ export const MobileMenu: React.FC<Props> = ({ isToggled, toggleClick }: Props) =
       status: false,
       key: 0,
    });
-
-   const handleToggle = (key: number) => {
-      if (isActive.key === key) {
-
-         setIsActive({
-            status: false,
-            key,
-         });
-
-      } else {
-         setIsActive({
-            status: true,
-            key,
-         });
-      }
-   };
-
    const domNode: RefObject<HTMLUListElement> = useClickOutside(() => {
       setIsActive((prev) => {
          return {
@@ -50,12 +33,12 @@ export const MobileMenu: React.FC<Props> = ({ isToggled, toggleClick }: Props) =
                <div className="mobile-header-top">
                   <div className="mobile-header-logo">
                      <Link to="/">
-                        <a>
+                        <div>
                            <img
                               src="/assets/imgs/theme/logo.svg"
                               alt="logo"
                            />
-                        </a>
+                        </div>
                      </Link>
                   </div>
                   <div className="mobile-menu-close close-style-wrap close-style-position-inherit">
@@ -83,84 +66,84 @@ export const MobileMenu: React.FC<Props> = ({ isToggled, toggleClick }: Props) =
                   <div className="mobile-menu-wrap mobile-header-border">
                      <div className="main-categori-wrap mobile-header-border">
                         <Link to="#">
-                           <a className="categori-button-active-2">
+                           <div className="categori-button-active-2">
                               <span className="fi-rs-apps"></span> Browse
                               Categories
-                           </a>
+                           </div>
                         </Link>
                         <div className="categori-dropdown-wrap categori-dropdown-active-small">
                            <ul>
                               <li>
                                  <Link to="/shop">
-                                    <a>
+                                    <div>
                                        <i className="evara-font-dress"></i>
                                        Women's Clothing
-                                    </a>
+                                    </div>
                                  </Link>
                               </li>
                               <li>
                                  <Link to="/shop">
-                                    <a>
+                                    <div>
                                        <i className="evara-font-tshirt"></i>
                                        Men's Clothing
-                                    </a>
+                                    </div>
                                  </Link>
                               </li>
                               <li>
                                  {" "}
                                  <Link to="/shop">
-                                    <a>
+                                    <div>
                                        <i className="evara-font-smartphone"></i>{" "}
                                        Cellphones
-                                    </a>
+                                    </div>
                                  </Link>
                               </li>
                               <li>
                                  <Link to="/shop">
-                                    <a>
+                                    <div>
                                        <i className="evara-font-desktop"></i>
                                        Computer & Office
-                                    </a>
+                                    </div>
                                  </Link>
                               </li>
                               <li>
                                  <Link to="/shop">
-                                    <a>
+                                    <div>
                                        <i className="evara-font-cpu"></i>
                                        Consumer Electronics
-                                    </a>
+                                    </div>
                                  </Link>
                               </li>
                               <li>
                                  <Link to="/shop">
-                                    <a>
+                                    <div>
                                        <i className="evara-font-home"></i>
                                        Home & Garden
-                                    </a>
+                                    </div>
                                  </Link>
                               </li>
                               <li>
                                  <Link to="/shop">
-                                    <a>
+                                    <div>
                                        <i className="evara-font-high-heels"></i>
                                        Shoes
-                                    </a>
+                                    </div>
                                  </Link>
                               </li>
                               <li>
                                  <Link to="/shop">
-                                    <a>
+                                    <div>
                                        <i className="evara-font-teddy-bear"></i>
                                        Mother & Kids
-                                    </a>
+                                    </div>
                                  </Link>
                               </li>
                               <li>
                                  <Link to="/shop">
-                                    <a>
+                                    <div>
                                        <i className="evara-font-kite"></i>
                                        Outdoor fun
-                                    </a>
+                                    </div>
                                  </Link>
                               </li>
                            </ul>
@@ -176,43 +159,10 @@ export const MobileMenu: React.FC<Props> = ({ isToggled, toggleClick }: Props) =
                                     : "menu-item-has-children"
                               }
                            >
-                              <span
-                                 className="menu-expand"
-                                 onClick={() => handleToggle(1)}
-                              >
-                                 <i className="fi-rs-angle-small-down"></i>
-                              </span>
+
                               <Link to="/index">
-                                 <a>Home</a>
+                                 <div>Home</div>
                               </Link>
-                              <ul
-                                 className={
-                                    isActive.key == 1
-                                       ? "dropdown"
-                                       : "d-none"
-                                 }
-                              >
-                                 <li>
-                                    <Link to="/index">
-                                       <a>Home 1</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/index-2">
-                                       <a>Home 2</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/index-3">
-                                       <a>Home 3</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/index-4">
-                                       <a>Home 4</a>
-                                    </Link>
-                                 </li>
-                              </ul>
                            </li>
                            <li
                               className={
@@ -221,84 +171,12 @@ export const MobileMenu: React.FC<Props> = ({ isToggled, toggleClick }: Props) =
                                     : "menu-item-has-children"
                               }
                            >
-                              <span
-                                 className="menu-expand"
-                                 onClick={() => handleToggle(2)}
-                              >
-                                 <i className="fi-rs-angle-small-down"></i>
-                              </span>
                               <Link to="/shop">
-                                 <a>shop</a>
+                                 <div>shop</div>
                               </Link>
-                              <ul
-                                 className={
-                                    isActive.key == 2
-                                       ? "dropdown"
-                                       : "d-none"
-                                 }
-                              >
-                                 <li>
-                                    <Link to="/shop">
-                                       <a>
-                                          Shop Grid – Right
-                                          Sidebar
-                                       </a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/shop-grid-left">
-                                       <a>
-                                          Shop Grid – Left Sidebar
-                                       </a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/shop-list-right">
-                                       <a>
-                                          Shop List – Right
-                                          Sidebar
-                                       </a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/shop-list-left">
-                                       <a>
-                                          Shop List – Left Sidebar
-                                       </a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/shop-fullwidth">
-                                       <a>Shop - Wide</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/shop-filter">
-                                       <a>Shop – Filter</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/shop-wishlist">
-                                       <a>Shop – Wishlist</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/shop-cart">
-                                       <a>Shop – Cart</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/shop-checkout">
-                                       <a>Shop – Checkout</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/shop-compare">
-                                       <a>Shop – Compare</a>
-                                    </Link>
-                                 </li>
-                              </ul>
+
                            </li>
+
                            <li
                               className={
                                  isActive.key == 3
@@ -306,129 +184,11 @@ export const MobileMenu: React.FC<Props> = ({ isToggled, toggleClick }: Props) =
                                     : "menu-item-has-children"
                               }
                            >
-                              <span
-                                 className="menu-expand"
-                                 onClick={() => handleToggle(3)}
-                              >
-                                 <i className="fi-rs-angle-small-down"></i>
-                              </span>
-                              <Link to="#">
-                                 <a>Mega menu</a>
+                              <Link to="/blog">
+                                 <div>Blog</div>
                               </Link>
-                              <ul
-                                 className={
-                                    isActive.key == 3
-                                       ? "dropdown"
-                                       : "d-none"
-                                 }
-                              >
-                                 <li className="menu-item-has-children">
-                                    <span className="menu-expand"></span>
-                                    <Link to="#">
-                                       <a>Women's Fashion</a>
-                                    </Link>
-                                    <ul className="dropdown">
-                                       <li>
-                                          <Link to="/shop-product-right">
-                                             <a>Dresses</a>
-                                          </Link>
-                                       </li>
-                                       <li>
-                                          <Link to="/shop-product-right">
-                                             <a>
-                                                Blouses & Shirts
-                                             </a>
-                                          </Link>
-                                       </li>
-                                       <li>
-                                          <Link to="/shop-product-right">
-                                             <a>
-                                                Hoodies &
-                                                Sweatshirts
-                                             </a>
-                                          </Link>
-                                       </li>
-                                       <li>
-                                          <Link to="/shop-product-right">
-                                             <a>Women's Sets</a>
-                                          </Link>
-                                       </li>
-                                    </ul>
-                                 </li>
-                                 <li className="menu-item-has-children">
-                                    <span className="menu-expand"></span>
-                                    <Link to="#">
-                                       <a>Men's Fashion</a>
-                                    </Link>
-                                    <ul className="dropdown">
-                                       <li>
-                                          <Link to="/shop-product-right">
-                                             <a>Jackets</a>
-                                          </Link>
-                                       </li>
-                                       <li>
-                                          <Link to="/shop-product-right">
-                                             <a>
-                                                Casual Faux
-                                                Leather
-                                             </a>
-                                          </Link>
-                                       </li>
-                                       <li>
-                                          <Link to="/shop-product-right">
-                                             <a>
-                                                Genuine Leather
-                                             </a>
-                                          </Link>
-                                       </li>
-                                    </ul>
-                                 </li>
-                                 <li className="menu-item-has-children">
-                                    <span className="menu-expand"></span>
-                                    <Link to="#">
-                                       <a>Technology</a>
-                                    </Link>
-                                    <ul className="dropdown">
-                                       <li>
-                                          <Link to="/shop-product-right">
-                                             <a>
-                                                Gaming Laptops
-                                             </a>
-                                          </Link>
-                                       </li>
-                                       <li>
-                                          <Link to="/shop-product-right">
-                                             <a>
-                                                Ultraslim
-                                                Laptops
-                                             </a>
-                                          </Link>
-                                       </li>
-                                       <li>
-                                          <Link to="/shop-product-right">
-                                             <a>Tablets</a>
-                                          </Link>
-                                       </li>
-                                       <li>
-                                          <Link to="/shop-product-right">
-                                             <a>
-                                                Laptop
-                                                Accessories
-                                             </a>
-                                          </Link>
-                                       </li>
-                                       <li>
-                                          <Link to="/shop-product-right">
-                                             <a>
-                                                Tablet
-                                                Accessories
-                                             </a>
-                                          </Link>
-                                       </li>
-                                    </ul>
-                                 </li>
-                              </ul>
                            </li>
+
                            <li
                               className={
                                  isActive.key == 4
@@ -436,238 +196,58 @@ export const MobileMenu: React.FC<Props> = ({ isToggled, toggleClick }: Props) =
                                     : "menu-item-has-children"
                               }
                            >
-                              <span
-                                 className="menu-expand"
-                                 onClick={() => handleToggle(4)}
-                              >
-                                 <i className="fi-rs-angle-small-down"></i>
-                              </span>
-                              <Link to="/blog-category-fullwidth">
-                                 <a>Blog</a>
+                              <Link to="/about">
+                                 <div>About</div>
                               </Link>
-                              <ul
-                                 className={
-                                    isActive.key == 4
-                                       ? "dropdown"
-                                       : "d-none"
-                                 }
-                              >
-                                 <li>
-                                    <Link to="/blog-category-grid">
-                                       <a>Blog Category Grid</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/blog-category-list">
-                                       <a>Blog Category List</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/blog-category-big">
-                                       <a>Blog Category Big</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/blog-category-fullwidth">
-                                       <a>Blog Category Wide</a>
-                                    </Link>
-                                 </li>
-                                 <li className="menu-item-has-children">
-                                    <span className="menu-expand"></span>
-                                    <Link to="#">
-                                       <a>Single Product Layout</a>
-                                    </Link>
-                                    <ul className="dropdown">
-                                       <li>
-                                          <Link to="/blog-post-left">
-                                             <a>Left Sidebar</a>
-                                          </Link>
-                                       </li>
-                                       <li>
-                                          <Link to="/blog-post-right">
-                                             <a>Right Sidebar</a>
-                                          </Link>
-                                       </li>
-                                       <li>
-                                          <Link to="/blog-post-fullwidth">
-                                             <a>No Sidebar</a>
-                                          </Link>
-                                       </li>
-                                    </ul>
-                                 </li>
-                              </ul>
-                           </li>
-                           <li
-                              className={
-                                 isActive.key == 5
-                                    ? "menu-item-has-children active"
-                                    : "menu-item-has-children"
-                              }
-                           >
-                              <span
-                                 className="menu-expand"
-                                 onClick={() => handleToggle(5)}
-                              >
-                                 <i className="fi-rs-angle-small-down"></i>
-                              </span>
-                              <Link to="#">
-                                 <a>Pages</a>
-                              </Link>
-                              <ul
-                                 className={
-                                    isActive.key == 5
-                                       ? "dropdown"
-                                       : "d-none"
-                                 }
-                              >
-                                 <li>
-                                    <Link to="/page-about">
-                                       <a>About Us</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/page-contact">
-                                       <a>Contact</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/page-account">
-                                       <a>My Account</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/page-login-register">
-                                       <a>login/register</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/page-purchase-guide">
-                                       <a>Purchase Guide</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/page-privacy-policy">
-                                       <a>Privacy Policy</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/page-terms">
-                                       <a>Terms of Service</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="/page-404">
-                                       <a>404 Page</a>
-                                    </Link>
-                                 </li>
-                              </ul>
-                           </li>
-                           <li
-                              className={
-                                 isActive.key == 6
-                                    ? "menu-item-has-children active"
-                                    : "menu-item-has-children"
-                              }
-                           >
-                              <span
-                                 className="menu-expand"
-                                 onClick={() => handleToggle(6)}
-                              >
-                                 <i className="fi-rs-angle-small-down"></i>
-                              </span>
-                              <Link to="#">
-                                 <a>Language</a>
-                              </Link>
-                              <ul
-                                 className={
-                                    isActive.key == 6
-                                       ? "dropdown"
-                                       : "d-none"
-                                 }
-                              >
-                                 <li>
-                                    <Link to="#">
-                                       <a>English</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="#">
-                                       <a>French</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="#">
-                                       <a>German</a>
-                                    </Link>
-                                 </li>
-                                 <li>
-                                    <Link to="#">
-                                       <a>Spanish</a>
-                                    </Link>
-                                 </li>
-                              </ul>
                            </li>
                         </ul>
                      </nav>
                   </div>
                   <div className="mobile-header-info-wrap mobile-header-border">
-                     <div className="single-mobile-header-info mt-30">
-                        <Link to="/page-contact">
-                           <a> Our location </a>
-                        </Link>
-                     </div>
                      <div className="single-mobile-header-info">
                         <Link to="/page-login-register">
-                           <a>Log In / Sign Up </a>
+                           <div>Log In / Sign Up </div>
                         </Link>
                      </div>
                      <div className="single-mobile-header-info">
                         <Link to="#">
-                           <a>(+01) - 2345 - 6789 </a>
+                           <div>0397184208 </div>
                         </Link>
                      </div>
                   </div>
                   <div className="mobile-social-icon">
                      <h5 className="mb-15 text-grey-4">Follow Us</h5>
                      <Link to="#">
-                        <a>
+                        <div>
                            <img
                               src="/assets/imgs/theme/icons/icon-facebook.svg"
                               alt=""
                            />
-                        </a>
+                        </div>
                      </Link>
                      <Link to="#">
-                        <a>
+                        <div>
                            <img
                               src="/assets/imgs/theme/icons/icon-twitter.svg"
                               alt=""
                            />
-                        </a>
+                        </div>
                      </Link>
                      <Link to="#">
-                        <a>
+                        <div>
                            <img
                               src="/assets/imgs/theme/icons/icon-instagram.svg"
                               alt=""
                            />
-                        </a>
+                        </div>
                      </Link>
                      <Link to="#">
-                        <a>
-                           <img
-                              src="/assets/imgs/theme/icons/icon-pinterest.svg"
-                              alt=""
-                           />
-                        </a>
-                     </Link>
-                     <Link to="#">
-                        <a>
+                        <div>
                            <img
                               src="/assets/imgs/theme/icons/icon-youtube.svg"
                               alt=""
                            />
-                        </a>
+                        </div>
                      </Link>
                   </div>
                </div>

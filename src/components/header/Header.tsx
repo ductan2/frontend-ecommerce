@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { useState, useEffect } from "react"
 import Search from "../search/Search";
 const totalCartItems = 3
@@ -20,6 +20,11 @@ export const Header = ({ toggleClick }: Props) => {
          }
       });
    });
+   const location = useLocation(); // get slug
+
+   function checkActiveUrl(item: string) {
+      return item === location.pathname;
+   }
    const handleToggle = () => setToggled(!isToggled);
    return (
       <>
@@ -36,12 +41,12 @@ export const Header = ({ toggleClick }: Props) => {
                      <div className="header-wrap">
                         <div className="logo logo-width-1">
                            <Link to="/">
-                              <a>
+                              <div>
                                  <img
                                     src="/assets/imgs/theme/logo.svg"
                                     alt="logo"
                                  />
-                              </a>
+                              </div>
                            </Link>
                         </div>
                         <div className="header-right">
@@ -52,7 +57,7 @@ export const Header = ({ toggleClick }: Props) => {
                               <div className="header-action-2">
                                  <div className="header-action-icon-2">
                                     <Link to="/shop-compare">
-                                       <a>
+                                       <div>
                                           <img
                                              className="svgInject"
                                              alt="Evara"
@@ -61,19 +66,19 @@ export const Header = ({ toggleClick }: Props) => {
                                           <span className="pro-count blue">
                                              {totalCompareItems}
                                           </span>
-                                       </a>
+                                       </div>
                                     </Link>
                                     <Link to="/shop-compare">
-                                       <a>
+                                       <div>
                                           <span className="lable ml-0">
                                              Compare
                                           </span>
-                                       </a>
+                                       </div>
                                     </Link>
                                  </div>
                                  <div className="header-action-icon-2">
-                                    <Link to="/shop-wishlist">
-                                       <a>
+                                    <Link to="/wishlist">
+                                       <div>
                                           <img
                                              className="svgInject"
                                              alt="Evara"
@@ -82,17 +87,17 @@ export const Header = ({ toggleClick }: Props) => {
                                           <span className="pro-count blue">
                                              {totalWishlistItems}
                                           </span>
-                                       </a>
+                                       </div>
                                     </Link>
-                                    <Link to="/shop-wishlist">
+                                    <Link to="/wishlist">
                                        <span className="lable">
                                           Wishlist
                                        </span>
                                     </Link>
                                  </div>
                                  <div className="header-action-icon-2">
-                                    <Link to="/shop-cart">
-                                       <a className="mini-cart-icon">
+                                    <Link to="/cart">
+                                       <div className="mini-cart-icon">
                                           <img
                                              alt="Evara"
                                              src="/assets/imgs/theme/icons/icon-cart.svg"
@@ -100,68 +105,68 @@ export const Header = ({ toggleClick }: Props) => {
                                           <span className="pro-count blue">
                                              {totalCartItems}
                                           </span>
-                                       </a>
+                                       </div>
                                     </Link>
-                                    <Link to="/shop-cart">
-                                       <a>
+                                    <Link to="/cart">
+                                       <div>
                                           <span className="lable">
                                              Cart
                                           </span>
-                                       </a>
+                                       </div>
                                     </Link>
                                  </div>
 
                                  <div className="header-action-icon-2">
-                                    <Link to="/page-account"><a>
+                                    <Link to="/page-account"><div>
                                        <img
                                           className="svgInject"
                                           alt="Nest"
                                           src="/assets/imgs/theme/icons/icon-user.svg"
                                        />
-                                    </a></Link>
-                                    <Link to="/page-account"><a>
+                                    </div></Link>
+                                    <Link to="/page-account"><div>
                                        <span className="lable ml-0">
                                           Account
                                        </span>
-                                    </a></Link>
+                                    </div></Link>
                                     <div className="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
                                        <ul>
                                           <li>
                                              <Link to="/page-account">
-                                                <a>
+                                                <div>
                                                    <i className="fi fi-rs-user mr-10"></i>
                                                    My Account
-                                                </a></Link>
+                                                </div></Link>
                                           </li>
                                           <li>
-                                             <Link to="/page-account"><a>
+                                             <Link to="/page-account"><div>
                                                 <i className="fi fi-rs-location-alt mr-10"></i>
                                                 Order Tracking
-                                             </a></Link>
+                                             </div></Link>
                                           </li>
                                           <li>
-                                             <Link to="/page-account"><a>
+                                             <Link to="/page-account"><div>
                                                 <i className="fi fi-rs-label mr-10"></i>
                                                 My Voucher
-                                             </a></Link>
+                                             </div></Link>
                                           </li>
                                           <li>
-                                             <Link to="/shop-wishlist"><a>
+                                             <Link to="/shop-wishlist"><div>
                                                 <i className="fi fi-rs-heart mr-10"></i>
                                                 My Wishlist
-                                             </a></Link>
+                                             </div></Link>
                                           </li>
                                           <li>
-                                             <Link to="/page-account"><a>
+                                             <Link to="/page-account"><div>
                                                 <i className="fi fi-rs-settings-sliders mr-10"></i>
                                                 Setting
-                                             </a></Link>
+                                             </div></Link>
                                           </li>
                                           <li>
-                                             <Link to="/page-login"><a>
+                                             <Link to="/page-login"><div>
                                                 <i className="fi fi-rs-sign-out mr-10"></i>
                                                 Sign out
-                                             </a></Link>
+                                             </div></Link>
                                           </li>
                                        </ul>
                                     </div>
@@ -183,17 +188,17 @@ export const Header = ({ toggleClick }: Props) => {
                      <div className="header-wrap header-space-between position-relative">
                         <div className="logo logo-width-1 d-block d-lg-none">
                            <Link to="/">
-                              <a>
+                              <div>
                                  <img
                                     src="/assets/imgs/theme/logo.svg"
                                     alt="logo"
                                  />
-                              </a>
+                              </div>
                            </Link>
                         </div>
                         <div className="header-nav d-none d-lg-flex">
                            <div className="main-categori-wrap d-none d-lg-block">
-                              <a
+                              <div
                                  className="categories-button-active"
                                  onClick={handleToggle}
                               >
@@ -201,7 +206,7 @@ export const Header = ({ toggleClick }: Props) => {
                                  <span className="et">Browse</span> All
                                  Categories
                                  <i className="fi-rs-angle-down"></i>
-                              </a>
+                              </div>
 
                               <div
                                  className={
@@ -210,57 +215,53 @@ export const Header = ({ toggleClick }: Props) => {
                                        : "categories-dropdown-wrap categories-dropdown-active-large font-heading"
                                  }
                               >
-                                 <div className="d-flex categori-dropdown-inner">
-                                    {/* <CategoryProduct2 />
-                                    <CategoryProduct3 /> */}
-                                 </div>
                                  <div
                                     className="more_slide_open"
-                                    style={{ display: "none" }}
+                                    style={{ display: "block" }}
                                  >
                                     <div className="d-flex categori-dropdown-inner">
                                        <ul>
                                           <li>
-                                             <Link to="/products"><a>
+                                             <Link to="/products"><div>
                                                 {" "}
                                                 <img
                                                    src="/assets/imgs/theme/icons/icon-1.svg"
                                                    alt=""
                                                 />
                                                 Milks and Dairies
-                                             </a></Link>
+                                             </div></Link>
                                           </li>
                                           <li>
-                                             <Link to="/products"><a>
+                                             <Link to="/products"><div>
                                                 {" "}
                                                 <img
                                                    src="/assets/imgs/theme/icons/icon-2.svg"
                                                    alt=""
                                                 />
                                                 Clothing & beauty
-                                             </a></Link>
+                                             </div></Link>
                                           </li>
                                        </ul>
                                        <ul className="end">
                                           <li>
-                                             <Link to="/products"><a>
+                                             <Link to="/products"><div>
                                                 {" "}
                                                 <img
                                                    src="/assets/imgs/theme/icons/icon-3.svg"
                                                    alt=""
                                                 />
                                                 Wines & Drinks
-                                             </a></Link>
+                                             </div></Link>
                                           </li>
                                           <li>
-                                             <Link to="/products"><a>
+                                             <Link to="/products"><div>
                                                 {" "}
                                                 <img
                                                    src="/assets/imgs/theme/icons/icon-4.svg"
                                                    alt=""
                                                 />
                                                 Fresh Seafood
-                                             </a></Link>
+                                             </div></Link>
                                           </li>
                                        </ul>
                                     </div>
@@ -281,364 +282,51 @@ export const Header = ({ toggleClick }: Props) => {
                                           src="/assets/imgs/theme/icons/icon-hot.svg"
                                           alt="hot deals"
                                        />
-                                       <Link to="/products"><a>
+                                       <Link to="/shop"><div>
                                           Hot Deals
-                                       </a>
+                                       </div>
                                        </Link>
                                     </li>
                                     <li>
+
                                        <Link to="/">
-                                          <a className="active">
-                                             Home
-                                          </a>
+                                          {checkActiveUrl("/") ?
+                                             <div className="active">Home</div> :
+                                             <div>Home</div>
+                                          }
                                        </Link>
                                     </li>
                                     <li>
-                                       <Link to="/page-about">
-                                          <a>About</a>
+                                       <Link to="/about">
+                                          {checkActiveUrl("/about") ?
+                                             <div className="active">About</div> :
+                                             <div>About</div>
+                                          }
                                        </Link>
                                     </li>
                                     <li>
                                        <Link to="/shop">
-                                          <a>
-                                             Shop
-
-                                          </a>
+                                          {checkActiveUrl("/shop") ?
+                                             <div className="active">Shop</div> :
+                                             <div>Shop</div>
+                                          }
+                                       </Link>
+                                    </li>
+                                    <li>
+                                       <Link to="/blog">
+                                          {checkActiveUrl("/blog") ?
+                                             <div className="active">Blog</div> :
+                                             <div>Blog</div>
+                                          }
                                        </Link>
                                     </li>
 
                                     <li>
-                                       <a href="#">Vendors <i className="fi-rs-angle-down"></i></a>
-                                       <ul className="sub-menu">
-                                          <li><Link to="/vendors"><a>Vendors Grid</a></Link></li>
-                                          <li><Link to="/vendors-list"><a>Vendors List</a></Link></li>
-                                          <li><Link to="/vendor-dashboard"><a>Vendor Dashboard</a></Link></li>
-                                          <li><Link to="/vendor-guide"><a>Vendor Guide</a></Link></li>
-                                       </ul>
-                                    </li>
-
-                                    <li className="position-static">
-                                       <Link to="/#">
-                                          <a>
-                                             Mega menu
-                                             <i className="fi-rs-angle-down"></i>
-                                          </a>
-                                       </Link>
-                                       <ul className="mega-menu">
-                                          <li className="sub-mega-menu sub-mega-menu-width-22">
-                                             <a
-                                                className="menu-title"
-                                                href="#"
-                                             >
-                                                Fruit & Vegetables
-                                             </a>
-                                             <ul>
-                                                <li>
-                                                   <a href="#">
-                                                      Meat &
-                                                      Poultry
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Fresh
-                                                      Vegetables
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Herbs &
-                                                      Seasonings
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Cuts &
-                                                      Sprouts
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Exotic
-                                                      Fruits &
-                                                      Veggies
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Packaged
-                                                      Produce
-                                                   </a>
-                                                </li>
-                                             </ul>
-                                          </li>
-                                          <li className="sub-mega-menu sub-mega-menu-width-22">
-                                             <a
-                                                className="menu-title"
-                                                href="#"
-                                             >
-                                                Breakfast & Dairy
-                                             </a>
-                                             <ul>
-                                                <li>
-                                                   <a href="#">
-                                                      Milk &
-                                                      Flavoured
-                                                      Milk
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Butter and
-                                                      Margarine
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Eggs
-                                                      Substitutes
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Marmalades
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Sour Cream
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Cheese
-                                                   </a>
-                                                </li>
-                                             </ul>
-                                          </li>
-                                          <li className="sub-mega-menu sub-mega-menu-width-22">
-                                             <a
-                                                className="menu-title"
-                                                href="#"
-                                             >
-                                                Meat & Seafood
-                                             </a>
-                                             <ul>
-                                                <li>
-                                                   <a href="#">
-                                                      Breakfast
-                                                      Sausage
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Dinner
-                                                      Sausage
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Chicken
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Sliced Deli
-                                                      Meat
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Wild Caught
-                                                      Fillets
-                                                   </a>
-                                                </li>
-                                                <li>
-                                                   <a href="#">
-                                                      Crab and
-                                                      Shellfish
-                                                   </a>
-                                                </li>
-                                             </ul>
-                                          </li>
-                                          <li className="sub-mega-menu sub-mega-menu-width-34">
-                                             <div className="menu-banner-wrap">
-                                                <a href="#">
-                                                   <img
-                                                      src="/assets/imgs/banner/banner-menu.png"
-                                                      alt="Nest"
-                                                   />
-                                                </a>
-                                                <div className="menu-banner-content">
-                                                   <h4>
-                                                      Hot deals
-                                                   </h4>
-                                                   <h3>
-                                                      Don't miss
-                                                      <br />
-                                                      Trending
-                                                   </h3>
-                                                   <div className="menu-banner-price">
-                                                      <span className="new-price text-success">
-                                                         Save to
-                                                         50%
-                                                      </span>
-                                                   </div>
-                                                   <div className="menu-banner-btn">
-                                                      <a href="#">
-                                                         Shop now
-                                                      </a>
-                                                   </div>
-                                                </div>
-                                                <div className="menu-banner-discount">
-                                                   <h3>
-                                                      <span>
-                                                         25%
-                                                      </span>
-                                                      off
-                                                   </h3>
-                                                </div>
-                                             </div>
-                                          </li>
-                                       </ul>
-                                    </li>
-                                    <li>
-                                       <Link to="/blog-category-grid">
-                                          <a>
-                                             Blog
-                                             <i className="fi-rs-angle-down"></i>
-                                          </a>
-                                       </Link>
-                                       <ul className="sub-menu">
-                                          <li>
-                                             <Link to="/blog-category-grid">
-                                                <a>
-                                                   Blog Category
-                                                   Grid
-                                                </a>
-                                             </Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/blog-category-list">
-                                                <a>
-                                                   Blog Category
-                                                   List
-                                                </a>
-                                             </Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/blog-category-big">
-                                                <a>
-                                                   Blog Category
-                                                   Big
-                                                </a>
-                                             </Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/blog-category-fullwidth">
-                                                <a>
-                                                   Blog Category
-                                                   Wide
-                                                </a>
-                                             </Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/#">
-                                                <a>
-                                                   Single Post
-                                                   <i className="fi-rs-angle-right"></i>
-                                                </a>
-                                             </Link>
-                                             <ul className="level-menu level-menu-modify">
-                                                <li>
-                                                   <Link to="/blog-post-left">
-                                                      <a>
-                                                         Left
-                                                         Sidebar
-                                                      </a>
-                                                   </Link>
-                                                </li>
-                                                <li>
-                                                   <Link to="/blog-post-right">
-                                                      <a>
-                                                         Right
-                                                         Sidebar
-                                                      </a>
-                                                   </Link>
-                                                </li>
-                                                <li>
-                                                   <Link to="/blog-post-fullwidth">
-                                                      <a>
-                                                         No
-                                                         Sidebar
-                                                      </a>
-                                                   </Link>
-                                                </li>
-                                             </ul>
-                                          </li>
-                                       </ul>
-                                    </li>
-                                    <li>
-                                       <Link to="/#">
-                                          <a>
-                                             Pages
-                                             <i className="fi-rs-angle-down"></i>
-                                          </a>
-                                       </Link>
-                                       <ul className="sub-menu">
-                                          <li>
-                                             <Link to="/page-about">
-                                                <a>About Us</a>
-                                             </Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/page-contact">
-                                                <a>Contact</a>
-                                             </Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/page-account">
-                                                <a>My Account</a>
-                                             </Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/page-login-register">
-                                                <a>
-                                                   login/register
-                                                </a>
-                                             </Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/page-purchase-guide">
-                                                <a>
-                                                   Purchase Guide
-                                                </a>
-                                             </Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/page-privacy-policy">
-                                                <a>
-                                                   Privacy Policy
-                                                </a>
-                                             </Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/page-terms">
-                                                <a>
-                                                   Terms of Service
-                                                </a>
-                                             </Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/page-404">
-                                                <a>404 Page</a>
-                                             </Link>
-                                          </li>
-                                       </ul>
-                                    </li>
-                                    <li>
-                                       <Link to="/page-contact">
-                                          <a>Contact</a>
+                                       <Link to="/">
+                                          {checkActiveUrl("/contact") ?
+                                             <div className="active">Contact</div> :
+                                             <div>Contact</div>
+                                          }
                                        </Link>
                                     </li>
                                  </ul>
@@ -656,19 +344,12 @@ export const Header = ({ toggleClick }: Props) => {
                            </p>
                         </div>
 
-                        <div className="header-action-icon-2 d-block d-lg-none">
-                           <div className="burger-icon burger-icon-white">
-                              <span className="burger-icon-top"></span>
-                              <span className="burger-icon-mid"></span>
-                              <span className="burger-icon-bottom"></span>
-                           </div>
-                        </div>
 
-                        <div className="header-action-right d-block d-lg-none">
+                        <div className="header-action-right  d-flex d-lg-none  ">
                            <div className="header-action-2">
                               <div className="header-action-icon-2">
                                  <Link to="/shop-wishlist">
-                                    <a>
+                                    <div>
                                        <img
                                           alt="Evara"
                                           src="/assets/imgs/theme/icons/icon-compare.svg"
@@ -676,12 +357,12 @@ export const Header = ({ toggleClick }: Props) => {
                                        <span className="pro-count white">
                                           {totalCompareItems}
                                        </span>
-                                    </a>
+                                    </div>
                                  </Link>
                               </div>
                               <div className="header-action-icon-2">
                                  <Link to="/shop-wishlist">
-                                    <a>
+                                    <div>
                                        <img
                                           alt="Evara"
                                           src="/assets/imgs/theme/icons/icon-heart.svg"
@@ -689,12 +370,12 @@ export const Header = ({ toggleClick }: Props) => {
                                        <span className="pro-count white">
                                           {totalWishlistItems}
                                        </span>
-                                    </a>
+                                    </div>
                                  </Link>
                               </div>
                               <div className="header-action-icon-2">
                                  <Link to="/shop-cart">
-                                    <a className="mini-cart-icon">
+                                    <div className="mini-cart-icon">
                                        <img
                                           alt="Evara"
                                           src="/assets/imgs/theme/icons/icon-cart.svg"
@@ -702,29 +383,29 @@ export const Header = ({ toggleClick }: Props) => {
                                        <span className="pro-count white">
                                           {totalCartItems}
                                        </span>
-                                    </a>
+                                    </div>
                                  </Link>
                                  <div className="cart-dropdown-wrap cart-dropdown-hm2">
                                     <ul>
                                        <li>
                                           <div className="shopping-cart-img">
                                              <Link to="/shop">
-                                                <a>
+                                                <div>
                                                    <img
                                                       alt="Evara"
                                                       src="/assets/imgs/shop/thumbnail-3.jpg"
                                                    />
-                                                </a>
+                                                </div>
                                              </Link>
                                           </div>
                                           <div className="shopping-cart-title">
                                              <h4>
                                                 <Link to="/shop">
-                                                   <a>
+                                                   <div>
                                                       Plain
                                                       Striola
                                                       Shirts
-                                                   </a>
+                                                   </div>
                                                 </Link>
                                              </h4>
                                              <h3>
@@ -734,30 +415,30 @@ export const Header = ({ toggleClick }: Props) => {
                                           </div>
                                           <div className="shopping-cart-delete">
                                              <Link to="/#">
-                                                <a>
+                                                <div>
                                                    <i className="fi-rs-cross-small"></i>
-                                                </a>
+                                                </div>
                                              </Link>
                                           </div>
                                        </li>
                                        <li>
                                           <div className="shopping-cart-img">
                                              <Link to="/shop">
-                                                <a>
+                                                <div>
                                                    <img
                                                       alt="Evara"
                                                       src="/assets/imgs/shop/thumbnail-4.jpg"
                                                    />
-                                                </a>
+                                                </div>
                                              </Link>
                                           </div>
                                           <div className="shopping-cart-title">
                                              <h4>
                                                 <Link to="/shop">
-                                                   <a>
+                                                   <div>
                                                       Macbook Pro
                                                       2022
-                                                   </a>
+                                                   </div>
                                                 </Link>
                                              </h4>
                                              <h3>
@@ -767,9 +448,9 @@ export const Header = ({ toggleClick }: Props) => {
                                           </div>
                                           <div className="shopping-cart-delete">
                                              <Link to="/#">
-                                                <a>
+                                                <div>
                                                    <i className="fi-rs-cross-small"></i>
-                                                </a>
+                                                </div>
                                              </Link>
                                           </div>
                                        </li>
@@ -783,10 +464,10 @@ export const Header = ({ toggleClick }: Props) => {
                                        </div>
                                        <div className="shopping-cart-button">
                                           <Link to="/shop-cart">
-                                             <a>View cart</a>
+                                             <div>View cart</div>
                                           </Link>
                                           <Link to="/shop-checkout">
-                                             <a>Checkout</a>
+                                             <div>Checkout</div>
                                           </Link>
                                        </div>
                                     </div>
