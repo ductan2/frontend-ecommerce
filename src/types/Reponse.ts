@@ -10,7 +10,8 @@ export type AsyncState<T> = {
    isSuccess?: boolean;
    message?: string;
    errorResponse?: errorResponse[]
-   dataUpdate?: T
+   dataUpdate?: T,
+   dataItem?:T,
 };
 export interface ErrorResponseAxios {
    response?: {

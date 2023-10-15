@@ -20,6 +20,8 @@ const initialState: AsyncStateWithPage<Product> = {
    message: "",
    itemPerPage: ITEMPERPAGE,
    totalItem: 0,
+   dataItem: {} as Product
+
 }
 export const getAllProducts = createAsyncThunk<{ data: Product[], total: number }, { query?: string, page?: number, limit?: number }>("products/get-all-product", async ({ query, page, limit = ITEMPERPAGE }) => {
    try {
@@ -41,6 +43,15 @@ export const removeToWishList = createAsyncThunk<Product, string>("products/remo
    try {
       const response = await productService.toggleWishlist(product_id);
       return response.data.result;
+   } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+   }
+});
+export const getAProduct = createAsyncThunk<Product, string>("products/get-product", async (product_id, thunkAPI) => {
+   try {
+      const response = await productService.getAProduct(product_id);
+      console.log("🚀 ~ file: productSlice.ts:53 ~ getAProduct ~ response:", response)
+      return response.data.result[0];
    } catch (error) {
       return thunkAPI.rejectWithValue(error);
    }
@@ -119,6 +130,21 @@ export const productSlice = createSlice({
                   position: toast.POSITION.TOP_RIGHT
                });
             }
+         })
+         .addCase(getAProduct.pending, (state) => {
+            state.isLoading = true;
+         })
+         .addCase(getAProduct.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.isError = false
+            state.isSuccess = true;
+            state.dataItem = action.payload
+         })
+         .addCase(getAProduct.rejected, (state) => {
+            state.isLoading = false;
+            state.isError = true
+            state.isSuccess = false;
+
          })
    }
 })

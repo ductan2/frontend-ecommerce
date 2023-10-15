@@ -503,3 +503,11 @@ label {
 		}
 	}
 }
+.comment-rating{
+	input[type="radio"]{
+		display: none;
+	}
+	.star{
+		cursor: pointer;
+	}
+}

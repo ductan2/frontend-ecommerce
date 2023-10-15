@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom"
 import { addToWishList } from "../../features/product/productSlice"
 import { useAppDispatch } from "../../store/store"
 import { Product } from "../../types/product"
@@ -11,23 +12,23 @@ type props = {
 export const ProductItem = ({ product }: props) => {
    const dispatch = useAppDispatch()
 
-   const addToWish =(id:string)=>{
+   const addToWish = (id: string) => {
       dispatch(addToWishList(id))
    }
-   if(!product) return <Loading isFull/>
+   if (!product) return <Loading isFull />
    return (
       <div className="col-lg-1-5 col-md-4 col-12 col-sm-6" >
          <div className="product-cart-wrap mb-30">
             <div className="product-img-action-wrap">
                <div className="product-img product-img-zoom">
-                  <a href="shop-product-right.html">
+                  <Link to={`/shop/product/${product._id}`}>
                      <img className="default-img" src={product.images[0].url} alt="" />
                      {product.images[1].url ? <img className="hover-img" src={product.images[1].url} alt="" /> : null}
-                  </a>
+                  </Link>
                </div>
                <div className="product-action-1 d-flex">
-                  <a onClick={()=>addToWish(product._id)} aria-label="Add To Wishlist" className="action-btn"><i className="fi-rs-heart"></i></a>
-                  <a aria-label="Quick view" className="action-btn" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i className="fi-rs-eye"></i></a>
+                  <a onClick={() => addToWish(product._id)} aria-label="Add To Wishlist" className="action-btn"><i className="fi-rs-heart"></i></a>
+                  <Link to={`/shop/product/${product._id}`} aria-label="Quick view" className="action-btn" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i className="fi-rs-eye"></i></Link>
                </div>
                <div className="product-badges product-badges-position product-badges-mrg">
                   {product.trending ? <span className="hot">Trending</span> : (
@@ -39,7 +40,7 @@ export const ProductItem = ({ product }: props) => {
                <div className="product-category">
                   <a href="shop-grid-right.html">{product.category[0].title}</a>
                </div>
-               <h2><a href="shop-product-right.html">{product.title}</a></h2>
+               <h2><Link to={`/shop/product/${product._id}`}>{product.title}</Link></h2>
                <div className="product-rate-cover">
                   <div className="product-rate d-inline-block">
                      <div className="product-rating" style={{ width: "90%" }}></div>

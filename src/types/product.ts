@@ -1,14 +1,16 @@
 
 import { UploadImageType } from "./commom";
+import { User } from "./user";
 
-interface ratings {
-   start: number;
+export interface ratings {
+   star: number;
    comment: string;
-   product_id: string; // id user comment
+   postedBy: User; // id user comment
+   posted_at: string;
 }
 interface category {
-   _id:string;
-   title:string
+   _id: string;
+   title: string
 }
 export interface Product {
    _id: string;
@@ -23,7 +25,7 @@ export interface Product {
    images: UploadImageType[];
    trending: boolean
    featured: boolean
-   color: string[] | string;
+   color: { _id: string, title: string }[]
    rating_distribution: number;
    ratings?: ratings[];
    created_at: string;

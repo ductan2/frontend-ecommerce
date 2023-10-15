@@ -13,8 +13,8 @@ export const PopularProduct = () => {
             <h1 className='mb-30'>Popular products</h1>
             <div className="row">
                <div className="col-lg-12">
-                  <ProductsGridView />
-                  <ProductsGridView />
+                  {/* <ProductsGridView />
+                  <ProductsGridView /> */}
 
                </div>
             </div>

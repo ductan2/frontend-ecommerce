@@ -264,3 +264,45 @@
         }
     }
 }
+.gallery{
+    width: 100%;
+    height: 150px;
+    .gallery-box{
+        border: 1px solid #a2d2c9;
+        border-radius: 15px;
+    transition: all .3s ease 0s;
+        &:hover{
+            transform: translateY(-5px);
+            transition: all .3s ease 0s;
+            box-shadow: 0 0 20px rgba(0,0,0,.2);
+        }
+        img{
+            object-fit:cover;
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+.color-details{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 15px 0;
+    cursor: pointer;
+    &-icon{
+        color:#3BB77E !important;
+        
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+   div{
+    width: 40px;
+    height: 40px;
+    border: 1px solid #a2d2c9;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+   }
+}
