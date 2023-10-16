@@ -259,3 +259,8 @@ input[type=number]:focus,
 		height: 50px !important;
 	}
 }
+.text-red-hover{
+	&:hover{
+		color: red !important;
+	}
+}

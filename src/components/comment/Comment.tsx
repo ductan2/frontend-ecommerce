@@ -2,19 +2,37 @@ import { useEffect, useState } from "react"
 import { ratings } from "../../types/product"
 import moment from "moment"
 import { CommentStar } from "./CommentStar"
+import { debounce } from "debounce";
+import { useAppDispatch } from "../../store/store";
+import { ratingsProduct } from "../../features/product/productSlice";
+import { Loading } from "../loading/Loading";
 type Props = {
+   product_id:string
    post: ratings[]
 }
-export const Comment = ({ post }: Props) => {
+export const Comment = ({ post,product_id }: Props) => {
    const [avgStar, setAvgStar] = useState<number>(0);
    const [rating, setRating] = useState<number>(0)
    const [hoverStar, setHoverStar] = useState<number>(0)
-
-
+   const [comment, setComment] = useState<string>("")
+   const [isLoad, setIsLoad] = useState<boolean>(false)
+   const dispatch = useAppDispatch()
    useEffect(() => {
       const avg = post.reduce((total, item) => total + item.star, 0)
       setAvgStar(avg as number / post.length)
    }, [post])
+   const handleChangeValue = debounce((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setComment(e.target.value)
+   }, 500)
+   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      setIsLoad(true)
+      setTimeout(() => {
+         dispatch(ratingsProduct({ product_id, star: rating, comment }))
+         setIsLoad(false)
+      }, 1000);
+   }
+
    if (!post) return null
    return (
       <>
@@ -25,8 +43,8 @@ export const Comment = ({ post }: Props) => {
                   <div className="col-lg-8">
                      <h4 className="mb-30">Customer questions &amp; answers</h4>
                      <div className="comment-list">
-                        {post?.map((item) => {
-                           return <div className="single-comment mb-30 ">
+                        {post?.map((item,index) => {
+                           return <div className="single-comment mb-30 " key={index}>
                               <div className="user row">
                                  <div className="thumb col-2">
                                     <img src={item.postedBy.avatar} alt="" />
@@ -55,7 +73,7 @@ export const Comment = ({ post }: Props) => {
                         <div className="product-rate d-inline-block mr-15">
                            <div className="product-rating" style={{ width: "90%" }}></div>
                         </div>
-                        <h6>{avgStar} out of 5</h6>
+                        <h6>{avgStar.toFixed(2)} out of 5</h6>
                      </div>
                      <div className="progress">
                         <span>5 star</span>
@@ -87,19 +105,19 @@ export const Comment = ({ post }: Props) => {
                <h4 className="mb-15">Add a review</h4>
                <div className="row">
                   <div className="col-lg-8 col-md-12">
-                     <form className="form-contact comment_form" action="#" id="commentForm">
+                     <form className="form-contact comment_form" id="commentForm" onSubmit={handleSubmit}>
                         <div className="row">
                            <div className="col-12">
                               <CommentStar hoverStar={hoverStar} rating={rating} setHoverStar={setHoverStar} setRating={setRating} />
                               <div className="form-group">
                                  <textarea className="form-control w-100"
-                                    name="comment" id="comment"
+                                    name="comment" id="comment" onChange={handleChangeValue}
                                     cols={30} rows={9} placeholder="Write Comment"></textarea>
                               </div>
                            </div>
                         </div>
                         <div className="form-group">
-                           <button type="submit" className="button button-contactForm">Submit Review</button>
+                           <button type="submit" className="button button-contactForm px-5">{isLoad ? <Loading /> :"Submit reviews"}</button>
                         </div>
                      </form>
                   </div>

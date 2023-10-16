@@ -420,6 +420,9 @@ input[type=number]:focus,
     width: 100%;
     height: 50px !important; }
 
+.text-red-hover:hover {
+  color: red !important; }
+
 a,
 button,
 img,

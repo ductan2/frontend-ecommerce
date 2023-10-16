@@ -1,17 +1,19 @@
 import { Link, useLocation } from "react-router-dom"
 import { useState, useEffect } from "react"
 import Search from "../search/Search";
-const totalCartItems = 3
-const totalCompareItems = 2
-const totalWishlistItems = 2;
+
+
 
 interface Props {
    toggleClick: () => void;
+   totalCartItems: number;
+   totalWishlistItems: number;
 }
-export const Header = ({ toggleClick }: Props) => {
+export const Header = ({ toggleClick,totalCartItems,totalWishlistItems }: Props) => {
    const [isToggled, setToggled] = useState(false);
    const [scroll, setScroll] = useState(0);
 
+ 
    useEffect(() => {
       document.addEventListener("scroll", () => {
          const scrollCheck: number = (window.scrollY >= 100) ? 1 : 0;
@@ -21,6 +23,8 @@ export const Header = ({ toggleClick }: Props) => {
       });
    });
    const location = useLocation(); // get slug
+   
+
 
    function checkActiveUrl(item: string) {
       return item === location.pathname;
@@ -53,29 +57,9 @@ export const Header = ({ toggleClick }: Props) => {
                            <div className="search-style-2">
                               <Search />
                            </div>
-                           <div className="header-action-right">
+                           <div className="header-action-right mr-30">
                               <div className="header-action-2">
-                                 <div className="header-action-icon-2">
-                                    <Link to="/shop-compare">
-                                       <div>
-                                          <img
-                                             className="svgInject"
-                                             alt="Evara"
-                                             src="/assets/imgs/theme/icons/icon-compare.svg"
-                                          />
-                                          <span className="pro-count blue">
-                                             {totalCompareItems}
-                                          </span>
-                                       </div>
-                                    </Link>
-                                    <Link to="/shop-compare">
-                                       <div>
-                                          <span className="lable ml-0">
-                                             Compare
-                                          </span>
-                                       </div>
-                                    </Link>
-                                 </div>
+
                                  <div className="header-action-icon-2">
                                     <Link to="/wishlist">
                                        <div>
@@ -347,19 +331,6 @@ export const Header = ({ toggleClick }: Props) => {
 
                         <div className="header-action-right  d-flex d-lg-none  ">
                            <div className="header-action-2">
-                              <div className="header-action-icon-2">
-                                 <Link to="/shop-wishlist">
-                                    <div>
-                                       <img
-                                          alt="Evara"
-                                          src="/assets/imgs/theme/icons/icon-compare.svg"
-                                       />
-                                       <span className="pro-count white">
-                                          {totalCompareItems}
-                                       </span>
-                                    </div>
-                                 </Link>
-                              </div>
                               <div className="header-action-icon-2">
                                  <Link to="/shop-wishlist">
                                     <div>

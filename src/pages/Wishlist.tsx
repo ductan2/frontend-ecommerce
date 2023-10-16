@@ -21,7 +21,7 @@ export const Wishlist = () => {
       dispatch(removeToWishList(id))
       setTimeout(() => {
          dispatch(getWishList())
-      }, 500);
+      }, 200);
    }
    console.log(wishlist)
    if (isLoading) return <Loading />
@@ -41,7 +41,7 @@ export const Wishlist = () => {
                   <div className="col-xl-10 col-lg-12 m-auto">
                      <div className="mb-50">
                         <h1 className="heading-2 mb-10">Your Wishlist</h1>
-                        <h6 className="text-body">There are <span className="text-brand">5</span> products in this list</h6>
+                        <h6 className="text-body">There are <span className="text-brand">{wishlist.length}</span> products in this list</h6>
                      </div>
                      <div className="table-responsive shopping-summery">
                         <table className="table table-wishlist">

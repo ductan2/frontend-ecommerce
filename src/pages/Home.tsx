@@ -3,6 +3,7 @@ import { PopularProduct } from "../components/products/PopularProduct"
 
 
 export const Home = () => {
+  
   return (
     <main className="main">
       <Banner />
