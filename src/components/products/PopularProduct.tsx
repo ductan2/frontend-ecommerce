@@ -1,22 +1,38 @@
+import { useEffect, useState } from "react"
+import { RootState, useAppDispatch } from "../../store/store"
+import { getAllProducts } from "../../features/product/productSlice"
+import { Product } from "../../types/product"
+import { useSelector } from "react-redux"
+import { Loading } from "../loading/Loading"
+import { ProductItem } from "./ProductItem"
 
-import { ProductsGridView } from './ProductsGridView'
 
 
 export const PopularProduct = () => {
 
-   
 
+   const dispatch = useAppDispatch()
+   const [procTrending, setProcTrending] = useState<Product[]>([])
+   const { data } = useSelector((state: RootState) => state.products)
 
+   useEffect(() => {
+      dispatch(getAllProducts({}))
+   }, [dispatch])
+   useEffect(() => {
+      if (data) {
+         const proc = data.filter((item: Product) => item.trending === true)
+         setProcTrending(proc)
+      }
+   }, [data])
+   if (!procTrending) return <Loading isFull />
    return (
       <section className="product-tabs section-padding position-relative">
          <div className="container">
-            <h1 className='mb-30'>Popular products</h1>
+            <h1 className='mb-30'>Trendings products</h1>
             <div className="row">
-               <div className="col-lg-12">
-                  {/* <ProductsGridView />
-                  <ProductsGridView /> */}
-
-               </div>
+               {procTrending.map((item: Product) => (
+                  <ProductItem product={item} />
+               ))}
             </div>
          </div>
       </section>

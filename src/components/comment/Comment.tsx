@@ -7,19 +7,42 @@ import { useAppDispatch } from "../../store/store";
 import { ratingsProduct } from "../../features/product/productSlice";
 import { Loading } from "../loading/Loading";
 type Props = {
-   product_id:string
+   product_id: string
    post: ratings[]
 }
-export const Comment = ({ post,product_id }: Props) => {
-   const [avgStar, setAvgStar] = useState<number>(0);
+export const Comment = ({ post, product_id }: Props) => {
+   const [avgStar, setAvgStar] = useState<number>(5);
    const [rating, setRating] = useState<number>(0)
    const [hoverStar, setHoverStar] = useState<number>(0)
    const [comment, setComment] = useState<string>("")
+   const [star, setStar] = useState({
+      one: 0,
+      two: 0,
+      three: 0,
+      four: 0,
+      five: 0
+   })
    const [isLoad, setIsLoad] = useState<boolean>(false)
    const dispatch = useAppDispatch()
    useEffect(() => {
       const avg = post.reduce((total, item) => total + item.star, 0)
       setAvgStar(avg as number / post.length)
+   }, [post])
+   useEffect(() => {
+      if (post) {
+         const one = post.filter(item => item.star === 1).length
+         const two = post.filter(item => item.star === 2).length
+         const three = post.filter(item => item.star === 3).length
+         const four = post.filter(item => item.star === 4).length
+         const five = post.filter(item => item.star === 5).length
+         setStar({
+            one,
+            two,
+            three,
+            four,
+            five
+         })
+      }
    }, [post])
    const handleChangeValue = debounce((e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setComment(e.target.value)
@@ -43,7 +66,7 @@ export const Comment = ({ post,product_id }: Props) => {
                   <div className="col-lg-8">
                      <h4 className="mb-30">Customer questions &amp; answers</h4>
                      <div className="comment-list">
-                        {post?.map((item,index) => {
+                        {post?.map((item, index) => {
                            return <div className="single-comment mb-30 " key={index}>
                               <div className="user row">
                                  <div className="thumb col-2">
@@ -71,31 +94,31 @@ export const Comment = ({ post,product_id }: Props) => {
                      <h4 className="mb-30">Customer reviews</h4>
                      <div className="d-flex mb-30">
                         <div className="product-rate d-inline-block mr-15">
-                           <div className="product-rating" style={{ width: "90%" }}></div>
+                           <div className="product-rating" style={{ width: avgStar * 20 + "%" }}></div>
                         </div>
                         <h6>{avgStar.toFixed(2)} out of 5</h6>
                      </div>
                      <div className="progress">
-                        <span>5 star</span>
-                        <div className="progress-bar" role="progressbar" style={{ width: "50%" }} aria-valuenow={50} aria-valuemin={0} aria-valuemax={100}></div>
+                        <span>{star.five} star</span>
+                        <div className="progress-bar" role="progressbar" style={{ width: star.five / post.length * 100 + "%" }} aria-valuenow={50} aria-valuemin={0} aria-valuemax={100}>{(star.five / post.length * 100).toFixed(2)}%</div>
                      </div>
                      <div className="progress">
-                        <span>4 star</span>
-                        <div className="progress-bar" role="progressbar" style={{ width: "25%" }} aria-valuenow={25} aria-valuemin={0} aria-valuemax={100}>25%</div>
+                        <span>{star.four} star</span>
+                        <div className="progress-bar" role="progressbar" style={{ width: star.four / post.length * 100 + "%" }} aria-valuenow={25} aria-valuemin={0} aria-valuemax={100}>{(star.four / post.length * 100).toFixed(2)}%</div>
                      </div>
                      <div className="progress">
-                        <span>3 star</span>
-                        <div className="progress-bar" role="progressbar" style={{ width: "45%" }} aria-valuenow={45} aria-valuemin={0} aria-valuemax={100}>45%</div>
+                        <span>{star.three} star</span>
+                        <div className="progress-bar" role="progressbar" style={{ width: star.three / post.length * 100 + "%" }} aria-valuenow={45} aria-valuemin={0} aria-valuemax={100}>{(star.three / post.length * 100).toFixed(2)}%</div>
                      </div>
                      <div className="progress">
-                        <span>2 star</span>
-                        <div className="progress-bar" role="progressbar" style={{ width: "65%" }} aria-valuenow={65} aria-valuemin={0} aria-valuemax={100}>65%</div>
+                        <span>{star.two} star</span>
+                        <div className="progress-bar" role="progressbar" style={{ width: star.two / post.length * 100 + "%" }} aria-valuenow={65} aria-valuemin={0} aria-valuemax={100}>{(star.two / post.length * 100).toFixed(2)}%</div>
                      </div>
                      <div className="progress mb-30">
-                        <span>1 star</span>
-                        <div className="progress-bar" role="progressbar" style={{ width: "85%" }}
+                        <span>{star.one} star</span>
+                        <div className="progress-bar" role="progressbar" style={{ width: star.one / post.length * 100 + "%" }}
                            aria-valuenow={85} aria-valuemin={0} aria-valuemax={100}
-                        >85%</div>
+                        >{(star.one / post.length * 100).toFixed(2)}%</div>
                      </div>
                   </div>
                </div>
@@ -117,7 +140,7 @@ export const Comment = ({ post,product_id }: Props) => {
                            </div>
                         </div>
                         <div className="form-group">
-                           <button type="submit" className="button button-contactForm px-5">{isLoad ? <Loading /> :"Submit reviews"}</button>
+                           <button type="submit" className="button button-contactForm px-5">{isLoad ? <Loading /> : "Submit reviews"}</button>
                         </div>
                      </form>
                   </div>

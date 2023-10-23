@@ -21,13 +21,16 @@ export const Layout = () => {
             : bodyElement.classList.add("mobile-menu-active");
       }
    };
+
+   const { user, cart, wishlist } = useSelector((state: RootState) => state.user)
    useEffect(() => {
-      dispatch(getCart())
-      dispatch(getWishList())
-   }, [dispatch])
-   const { cart, wishlist } = useSelector((state: RootState) => state.user)
+      if (user._id) {
+         dispatch(getCart())
+         dispatch(getWishList())
+      }
+   }, [dispatch,user])
    useEffect(() => {
-      if (cart.length && wishlist.length) {
+      if (cart.length || wishlist.length) {
          setTotalCartItems(cart.length)
          setTotalWishlistItems(wishlist.length)
       }

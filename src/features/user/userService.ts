@@ -10,6 +10,9 @@ const registerUser = async (body: UserRegister) =>
 const loginUser = async (body: UserLogin) =>
    http.post('/users/login', body, { withCredentials: true, headers: { 'Content-Type': 'application/json' } })
 
+const getInfoUser = async () =>
+   http.get('/users/info', auth)
+
 const getWishList = async () =>
    http.get('/users/wishlist', auth)
 
@@ -28,8 +31,16 @@ const emptyCart = async () => {
 const updateCartQuantity = async (id: string, amount: number) => {
    return http.put(`/users/cart/update-cart/${id}`, { amount }, auth)
 }
+const cashOrderByPaypal = async (body:{COD?:boolean, couponApplied?:string,payment_id?:string}) => {
+   return http.post(`/users/order/cash-order`, body, auth)
+}
+
+const appliedCoupon = async (coupon: string) => {
+   return http.patch(`/users/apply-coupon`, { coupon }, auth)
+}
+
 const userService = {
    registerUser, loginUser, getWishList, addToCart, getCart, deleteCartItem,emptyCart,
-   updateCartQuantity
+   updateCartQuantity,cashOrderByPaypal,appliedCoupon,getInfoUser
 }
 export default userService;

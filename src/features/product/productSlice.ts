@@ -8,20 +8,23 @@ import { toast } from "react-toastify";
 export interface AsyncStateWithPage<T> extends AsyncState<T> {
    itemPerPage: number;
    totalItem: number
-   page?: number
+   page?: number,
+   showPagination: number,
+   filterData: T[],
 }
 
-const ITEMPERPAGE = 20;
+const ITEMPERPAGE = 1;
 const initialState: AsyncStateWithPage<Product> = {
    data: [],
+   filterData: [],
    isError: false,
    isLoading: false,
    isSuccess: false,
    message: "",
    itemPerPage: ITEMPERPAGE,
    totalItem: 0,
-   dataItem: {} as Product
-
+   dataItem: {} as Product,
+   showPagination: 3,
 }
 export const getAllProducts = createAsyncThunk<{ data: Product[], total: number }, { query?: string, page?: number, limit?: number }>("products/get-all-product", async ({ query, page, limit = ITEMPERPAGE }) => {
    try {
@@ -64,10 +67,42 @@ export const ratingsProduct = createAsyncThunk<Product, { comment: string, star:
       return thunkAPI.rejectWithValue(error);
    }
 });
+
 export const productSlice = createSlice({
    name: 'product',
    initialState: initialState,
-   reducers: {},
+   reducers: {
+      sortProducts: (state, action) => {
+         switch (action.payload) {
+            case 'title':
+               state.filterData.sort((a, b) => a.title.localeCompare(b.title));
+               break;
+            case '-title':
+               state.filterData.sort((a, b) => b.title.localeCompare(a.title));
+               break;
+            case 'price':
+               state.filterData.sort((a, b) => a.price - b.price);
+               break;
+            case '-price':
+               state.filterData.sort((a, b) => b.price - a.price);
+               break;
+            default:
+               state.filterData.sort((a, b) => b.created_at.localeCompare(a.created_at));
+               break;
+         }
+      },
+      filterProducts: (state, action) => {
+         const { selectedBrand, selectedCategories, priceRange } = action.payload;
+
+         state.filterData = state.data.filter(item => {
+            const brandMatch = selectedBrand ? item.brand === selectedBrand : true;
+            const categoryMatch = selectedCategories.every((category:string) => item.category.some(cat => cat.title === category));
+            const priceMatch = item.price >= priceRange.min && item.price <= priceRange.max;
+
+            return brandMatch && categoryMatch && priceMatch;
+         });
+      }
+   },
    extraReducers(builder) {
       builder.addCase(getAllProducts.pending, (state) => {
          state.isLoading = true;
@@ -153,7 +188,9 @@ export const productSlice = createSlice({
                window.location.reload();
             }
          })
+
+
    }
 })
-
+export const { sortProducts, filterProducts } = productSlice.actions;
 export default productSlice.reducer;

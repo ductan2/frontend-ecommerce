@@ -239,7 +239,7 @@
 
     .product-content-wrap {
         padding: 0 20px 20px 20px;
-
+        min-height: 210px;
         .product-category {
             margin-bottom: 5px;
 
@@ -1353,7 +1353,7 @@
 }
 
 .product-extra-link2 {
-    a {
+    div {
         background        : #fff none repeat scroll 0 0;
         border            : 1px solid #f1f1f1;
         color             : #333;
@@ -1372,7 +1372,6 @@
         &:hover {
             background-color: $color-brand;
             color           : #fff;
-
             i {
                 opacity: 1;
             }

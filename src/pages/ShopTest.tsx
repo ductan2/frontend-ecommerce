@@ -1,95 +1,62 @@
-import {  useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { RootState, useAppDispatch } from "../store/store"
-import { getAllProducts } from "../features/product/productSlice"
+import { filterProducts, getAllProducts, sortProducts } from "../features/product/productSlice"
 import { useSelector } from "react-redux"
 import { Loading } from "../components/loading/Loading"
 import { ProductItem } from "../components/products/ProductItem"
 import { Pagination } from "../components/pagination/Pagination"
 import { RangePrice } from "../components/filter/RangePrice"
-import { useLocation, useNavigate } from "react-router-dom"
-
 import { NewProduct } from "../components/products/NewProduct"
 import { getAllBrand } from "../features/brand/brandSlice"
 import { getAllCategoryProduct } from "../features/categoryProduct/categoryProcSlice"
-import { Product } from "../types/product"
-export const Shop = () => {
-   const { data, isLoading, totalItem, itemPerPage, showPagination } = useSelector((state: RootState) => state.products)
-   const { data: brands } = useSelector((state: RootState) => state.brands)
-   const { data: categoryProduct } = useSelector((state: RootState) => state.categoryProc)
-   const [products, setProducts] = useState<Product[]>(data)
-   const dispatch = useAppDispatch()
-   const navigate = useNavigate();
-   const [pagination, setPagination] = useState<number[]>([]);
-   const [pages, setPages] = useState<number>(Math.ceil(totalItem / itemPerPage));
-   const [currentPage, setCurrentPage] = useState<number>(1);
-   const [sort, setSort] = useState<string>("")
+import { useFilter } from "../hooks/useFilter"
+import { usePagination } from "../hooks/usePagination"
+export const ShopTest = () => {
+   const { data, isLoading, totalItem, itemPerPage, showPagination, filterData } = useSelector((state: RootState) => state.products);
+   const brands = useSelector((state: RootState) => state.brands.data);
+   const categoryProduct = useSelector((state: RootState) => state.categoryProc.data);
+   const dispatch = useAppDispatch();
    const [price, setPrice] = useState({ value: { min: 0, max: 500 } });
-   const searchParams = useLocation().search.slice(1);
-   const [selectedBrand, setSelectedBrand] = useState<string>('');
-   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+   const [pagination, setPagination] = useState<number[]>([]);
+   const [sort, setSort] = useState('')
+   const [products, setProducts] = useState(data || []);
+   const { currentPage, pages, next, prev, setCurrentPage } = usePagination(totalItem, itemPerPage);
+   const { selectedBrand, setSelectedBrand, selectedCategories, setSelectedCategories } = useFilter(data || []);
+   useEffect(() => {
+      dispatch(getAllBrand());
+      dispatch(getAllCategoryProduct());
+      dispatch(getAllProducts({ page: currentPage, limit: itemPerPage }));
+   }, [dispatch, currentPage, itemPerPage]);
 
-   const getData = (page: number, searchParams?: string) => {
-      const query = searchParams ? `${searchParams}` : '';
-      dispatch(getAllProducts({ page, query }));
-   };
 
    useEffect(() => {
-      getData(currentPage, searchParams)
+      if (data) {
+         setProducts(data);
+         cratePagination();
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [currentPage, searchParams, dispatch])
-
+   }, [data]);
    useEffect(() => {
-      dispatch(getAllProducts({}))
-      dispatch(getAllBrand())
-      dispatch(getAllCategoryProduct())
-   }, [dispatch])
-   const next = () => {
-
-      setCurrentPage((page) => page + 1);
-   };
-
-   const prev = () => {
-      setCurrentPage((page) => page - 1);
-   };
-
+      if (filterData) {
+         setProducts(filterData);
+      }
+   }, [filterData]);
    const cratePagination = () => {
       const arr: number[] = new Array(Math.ceil(totalItem / itemPerPage))
          .fill(1)
          .map((_, idx) => idx + 1);
 
       setPagination(arr);
-      setPages(Math.ceil(totalItem / itemPerPage));
-   };
-   useEffect(() => {
-      if (data) {
-         cratePagination();
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [data])
-   const handleActive = (item: number) => {
-      setCurrentPage(item);
    };
 
-   useEffect(() => {
-      if (data)
-         setProducts(data)
-   }, [data])
 
-   useEffect(() => {
-      const fetchData = async () => {
-         if (price.value.min === 0 && price.value.max === 500) return;
-         setCurrentPage(1);
-         navigate(`/shop?minPrice=${price.value.min}&maxPrice=${price.value.max}`);
-      };
-      fetchData();
-   }, [price.value.min, price.value.max, dispatch, navigate]);
 
    const handleBrandChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const selectedValue = event.target.value;
-      setSelectedBrand(selectedValue);
+      setSelectedBrand(event.target.value);
    };
+   const handleCategoryChange = (id?: string) => {
+      if (!id) return;  // return early if id is undefined
 
-   const handleCategoryChange = (id: string) => {
       const newSelectedCategories = [...selectedCategories];
       const index = newSelectedCategories.indexOf(id);
       if (index === -1) {
@@ -99,33 +66,32 @@ export const Shop = () => {
       }
       setSelectedCategories(newSelectedCategories);
    };
-   const handleFilter = () => {
-      const filteredProducts = data.filter((item) => {
-         const brandMatch = selectedBrand ? item.brand === selectedBrand : true;
-         const categoryMatch = selectedCategories.length === 0 ||
-            selectedCategories.every((category) =>
-               item.category.some((cat) => cat.title === category)
-            );
+   const handleActive = useCallback((item: number) => {
+      setCurrentPage(item);
+   }, [setCurrentPage]);
 
-         return brandMatch && categoryMatch;
-      });
-      setProducts(filteredProducts);
+   const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      dispatch(sortProducts(e.target.value));
+      setSort(e.target.value)
    };
-   if (!data || !itemPerPage || !showPagination) return null;
 
-
+   const handleFilter = () => {
+      const filterConditions = {
+         selectedBrand,
+         selectedCategories,
+         priceRange: price.value
+      };
+      dispatch(filterProducts(filterConditions));
+   };
    const start = Math.floor((currentPage - 1) / showPagination) * showPagination;
    const end = start + showPagination;
    const getPaginationGroup = pagination.slice(start, end);
 
-   const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setSort(e.target.value)
-      getData(currentPage, `sort=${e.target.value}`)
-      if (e.target.value === "") return navigate(`/shop`);
-      navigate(`/shop?sort=${e.target.value}`);
-   }
 
+
+   // Check for isLoading state right away
    if (isLoading) return <Loading isFull />
+   if (!products) return <Loading isFull />
    return (
       <>
          <main className="main" style={{ transform: "none" }}>
@@ -169,7 +135,10 @@ export const Shop = () => {
                                  </div>
                               </div>
                            </div>
-                           <button onClick={handleFilter} className="btn btn-sm btn-default"><i className="fi-rs-filter mr-5"></i> Fillter</button>
+                           <div className="d-flex gap-5">
+                              <button onClick={handleFilter} className="btn btn-sm btn-default"><i className="fi-rs-filter mr-5"></i> Fillter</button>
+                              <button onClick={() => setProducts(data)} className="btn btn-sm btn-white"> Clear</button>
+                           </div>
                         </div>
                         <NewProduct data={data.slice(0, 3)} />
                         <div className="banner-img wow fadeIn mb-lg-0 animated d-lg-block d-none" style={{ visibility: "hidden", animationName: "none" }}>

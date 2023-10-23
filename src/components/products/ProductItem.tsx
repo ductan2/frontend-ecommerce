@@ -43,7 +43,7 @@ export const ProductItem = ({ product }: props) => {
                <h2><Link to={`/shop/product/${product._id}`}>{product.title}</Link></h2>
                <div className="product-rate-cover">
                   <div className="product-rate d-inline-block">
-                     <div className="product-rating" style={{ width: "90%" }}></div>
+                     <div className="product-rating" style={{ width: product.rating_distribution * 20 + "%" }}></div>
                   </div>
                   <span className="font-small ml-5 text-muted"> {product.rating_distribution}</span>
                </div>

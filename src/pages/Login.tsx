@@ -1,9 +1,9 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, Navigate, useNavigate } from "react-router-dom"
 import { RootState, useAppDispatch } from "../store/store"
 import { UserLogin } from "../types/user"
 import { useFormik } from "formik"
 import * as yup from "yup"
-import { loginUser } from "../features/user/userSlice"
+import { getInfoUser, loginUser } from "../features/user/userSlice"
 import { InputCustom } from "../components/input/InputCustom"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
@@ -28,7 +28,7 @@ export const Login = () => {
          }, 500)
       }
    })
-   const { errorResponse, isLoading } = useSelector((state: RootState) => state.user)
+   const { errorResponse, isLoading,user } = useSelector((state: RootState) => state.user)
    useEffect(() => {
       if (errorResponse) {
          errorResponse.forEach((error) => {
@@ -37,6 +37,14 @@ export const Login = () => {
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [errorResponse])
+
+   useEffect(() => {
+      dispatch(getInfoUser())
+   }, [dispatch])
+   if(user._id) {
+      return <Navigate to="/" />
+   }
+
    return (
       <>
          <main className="main pages">

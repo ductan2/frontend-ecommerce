@@ -8,10 +8,12 @@ import { AxiosResponse } from "axios";
 
 interface AsyncStateWithWishList<T> extends AsyncState<T> {
    wishlist: Product[],
-   cart: CartItem[]
+   cart: CartItem[],
+   user: User
 }
 const initialState: AsyncStateWithWishList<User> = {
    data: [],
+   user: {} as User,
    isError: false,
    isLoading: false,
    isSuccess: false,
@@ -89,8 +91,34 @@ export const updateCartQuantity = createAsyncThunk<string, { id: string, amount:
       return thunkAPI.rejectWithValue(error);
    }
 })
+export const cashOrderByPaypal = createAsyncThunk<string, { COD?: boolean, couponApplied?: string, payment_id?: string }>("users/order/cash-order", async ({ COD, couponApplied, payment_id }, thunkAPI) => {
+   try {
+      const response = await userService.cashOrderByPaypal({ COD, couponApplied, payment_id });
+      return response.data.result;
+   } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+   }
+})
+export const appliedCoupon = createAsyncThunk<string, string>("users/apply-coupon", async (coupon, thunkAPI) => {
+   try {
+      const response = await userService.appliedCoupon(coupon);
+
+      return response.data;
+   } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+   }
+})
+
+export const getInfoUser = createAsyncThunk("users/info", async (_, thunkAPI) => {
+   try {
+      const response = await userService.getInfoUser();
+      return response.data.result;
+   } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+   }
+})
 export const userSlice = createSlice({
-   name: 'product',
+   name: 'users',
    initialState: initialState,
    reducers: {},
    extraReducers(builder) {
@@ -198,7 +226,60 @@ export const userSlice = createSlice({
                window.location.reload()
             }
          })
-
+         .addCase(cashOrderByPaypal.pending, (state) => {
+            state.isLoading = true;
+         })
+         .addCase(cashOrderByPaypal.fulfilled, (state) => {
+            state.isLoading = false;
+            state.isError = false
+            state.isSuccess = true;
+            if (state.isSuccess) {
+               toast.success("Order successfully !", {
+                  position: toast.POSITION.TOP_RIGHT
+               });
+            }
+         })
+         .addCase(cashOrderByPaypal.rejected, (state) => {
+            state.isLoading = false;
+            state.isError = true
+            state.isSuccess = false;
+         })
+         .addCase(appliedCoupon.pending, (state) => {
+            state.isLoading = true;
+         })
+         .addCase(appliedCoupon.fulfilled, (state) => {
+            state.isLoading = false;
+            state.isError = false
+            state.isSuccess = true;
+            if (state.isSuccess) {
+               toast.success("Applied coupon successfully !", {
+                  position: toast.POSITION.TOP_RIGHT
+               });
+            }
+         })
+         .addCase(appliedCoupon.rejected, (state) => {
+            state.isLoading = false;
+            state.isError = true
+            state.isSuccess = false;
+            toast.error("Coupon is valid", {
+               position: toast.POSITION.TOP_RIGHT
+            });
+         })
+         .addCase(getInfoUser.pending, (state) => {
+            state.isLoading = true;
+         })
+         .addCase(getInfoUser.fulfilled, (state,action) => {
+            state.isLoading = false;
+            state.isError = false
+            state.isSuccess = true;
+            state.user=action.payload
+         })
+         .addCase(getInfoUser.rejected, (state) => {
+            state.isLoading = false;
+            state.isError = true
+            state.isSuccess = false;
+          
+         })
    },
 })
 export default userSlice.reducer;

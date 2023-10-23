@@ -19,3 +19,11 @@ export type AsyncState<T> = {
    message?: string
    dataUpdate?: T
 };
+export interface Province {
+   name: string;
+   code: number;
+   division_type: string;
+   codename: string;
+   phone_code: number;
+   districts: [];
+ }

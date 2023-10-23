@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom"
 import { RootState, useAppDispatch } from "../store/store"
 import { useEffect, useState } from "react";
-import { emptyCart, getCart, removeToCartById, updateCartQuantity } from "../features/user/userSlice";
+import { appliedCoupon, cashOrderByPaypal, emptyCart, getCart, removeToCartById, updateCartQuantity } from "../features/user/userSlice";
 import { useSelector } from "react-redux";
 import { Loading } from "../components/loading/Loading";
 import { debounce } from "debounce";
+import { PayPalButton } from "react-paypal-button-v2";
+import { getConfigPayment } from "../features/payment/paymentSlice";
+import { SelectCustom } from "../components/select/SelectCustom";
 
 
 
@@ -12,20 +15,58 @@ export const Cart = () => {
 
    const dispatch = useAppDispatch();
 
-   const [totalCart, setTotalCart] = useState(0)
-
+   const [totalCart, setTotalCart] = useState<number>(0)
+   const [totalCartAfterDiscount, setTotalCartAfterDiscount] = useState<number>(0)
+   const [sdkLoading, setSdkLoading] = useState<boolean>(false)
+   const [cardMethod, setCardMethod] = useState<boolean>(false)
+   const [provinceList, setProviceList] = useState([])
+   const [districtList, setDistrictList] = useState([])
+   const [wardsList, setWardsList] = useState([])
+   const [coupon, setCoupon] = useState<string>("")
+   const [address, setAddress] = useState<{ province: string, district: string, wards: string }>({
+      province: "",
+      district: "",
+      wards: ""
+   })
    useEffect(() => {
       dispatch(getCart())
    }, [dispatch])
    const { cart, isLoading } = useSelector((state: RootState) => state.user)
+   const { data: dataPayment } = useSelector((state: RootState) => state.payment)
    useEffect(() => {
       if (cart) {
          const total = cart.reduce((total, item) => {
-            return total + (item.totalAfterDiscount !== 0 ? item.totalAfterDiscount : item.cartTotal)
+            return total + item.cartTotal
          }, 0)
          setTotalCart(total)
+
+         const totalAfterDiscount = cart.reduce((total, item) => {
+            return total + (item.totalAfterDiscount !== 0 ? item.totalAfterDiscount : item.cartTotal)
+         }, 0)
+         setTotalCartAfterDiscount(totalAfterDiscount)
       }
    }, [cart])
+   useEffect(() => {
+      dispatch(getConfigPayment())
+   }, [dispatch])
+   const addPaypalScript = async (data: string) => {
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.src = `https://www.paypal.com/sdk/js?client-id=${data}`
+      script.async = true
+      script.onload = () => {
+         setSdkLoading(true)
+      }
+   }
+   useEffect(() => {
+      if (dataPayment) {
+         if (!window.paypal) {
+            addPaypalScript(dataPayment)
+         }
+         else setSdkLoading(true)
+      }
+   }, [dataPayment])
+
    const removeCart = (id: string) => {
       setTimeout(() => {
          dispatch(removeToCartById(id))
@@ -42,9 +83,73 @@ export const Cart = () => {
             dispatch(getCart())
          }, 200)
       }
-   },500)
+   }, 500)
+   const handleCheckOut = () => {
+      dispatch(cashOrderByPaypal({ COD: true }))
+      setTimeout(() => {
+         dispatch(getCart())
+      }, 200)
+   }
+   useEffect(() => {
+      fetch('https://provinces.open-api.vn/api/')
+         .then((response) => {
+            if (!response.ok) {
+               throw new Error('Network response was not ok');
+            }
+            return response.json();
+         })
+         .then((data) => {
+            setProviceList(data);
+         })
 
-
+   }, []);
+   useEffect(() => {
+      if (address.province) {
+         fetch(`https://provinces.open-api.vn/api/d/search/?q=${address.province}`)
+            .then((response) => {
+               if (!response.ok) {
+                  throw new Error('Network response was not ok');
+               }
+               return response.json();
+            })
+            .then((data) => {
+               setDistrictList(data);
+            })
+      }
+   }, [address.province])
+   useEffect(() => {
+      if (address.district) {
+         fetch(`https://provinces.open-api.vn/api/w/search/?q=${address.district}`)
+            .then((response) => {
+               if (!response.ok) {
+                  throw new Error('Network response was not ok');
+               }
+               return response.json();
+            })
+            .then((data) => {
+               setWardsList(data);
+            })
+      }
+   }, [address.district])
+   const handleSetCoupon = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setCoupon(e.target.value)
+   }
+   const handleSubmitCoupon = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      dispatch(appliedCoupon(coupon)).then(() => {
+         setCoupon("")
+      })
+   }
+   const handleChangeValue = (e: React.ChangeEvent<HTMLSelectElement>, option: string) => {
+      if (option === "province")
+         setAddress({ ...address, province: e.target.value })
+      else if (option === "district") {
+         setAddress({ ...address, district: e.target.value })
+      }
+      else {
+         setAddress({ ...address, wards: e.target.value })
+      }
+   }
    if (isLoading || !cart) return <Loading isFull />
 
    return (
@@ -66,7 +171,7 @@ export const Cart = () => {
                         <table className="table table-wishlist">
                            <thead>
                               <tr className="main-heading">
-                                 <th scope="col" colSpan={2}>Product</th>
+                                 <th scope="col" className="start pl-30" colSpan={2}>Product</th>
                                  <th scope="col">Unit Price</th>
                                  <th scope="col">Quantity</th>
                                  <th scope="col">Subtotal</th>
@@ -107,7 +212,6 @@ export const Cart = () => {
                                     <td className="action text-center cursor-pointer text-red-hover" data-title="Remove" onClick={() => removeCart(item._id)}><i className="fi-rs-trash"></i></td>
                                  </tr>
                               ))}
-
                            </tbody>
                         </table>
                      </div>
@@ -115,23 +219,38 @@ export const Cart = () => {
                      <div className="cart-action d-flex justify-content-between">
                         <Link to={"/shop"} className="btn "><i className="fi-rs-arrow-left mr-10"></i>Continue Shopping</Link>
                      </div>
+                     <div className="row">
+                        <div className="col-4">
+                           <SelectCustom defaultName={"Please enter your province"} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChangeValue(e, "province")} value={address.province} data={provinceList} />
+                        </div>
+                        <div className="col-4">
+                           <SelectCustom defaultName={"Please enter your district"} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChangeValue(e, "district")} value={address.district} data={districtList} />
+                        </div>
+                        <div className="col-4">
+                           <SelectCustom defaultName={"Please enter your wards"} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChangeValue(e, "wards")} value={address.wards} data={wardsList} />
+                        </div>
+                     </div>
+
                   </div>
+
                   <div className="col-lg-4">
                      <div className="row mt-50">
                         <div className="col-lg-12">
                            <div className="p-40">
                               <h4 className="mb-10">Apply Coupon</h4>
                               <p className="mb-30"><span className="font-lg text-muted">Using A Promo Code?</span></p>
-                              <form action="#">
+                              <form onSubmit={handleSubmitCoupon}>
                                  <div className="d-flex justify-content-between">
-                                    <input className="font-medium mr-15 coupon" name="Coupon" placeholder="Enter Your Coupon" />
-                                    <button className="btn"><i className="fi-rs-label mr-10"></i>Apply</button>
+                                    <input className="font-medium mr-15 coupon" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSetCoupon(e)}
+                                       name="coupon" value={coupon} placeholder="Enter Your Coupon" />
+                                    <button type="submit" className="btn"><i className="fi-rs-label mr-10"></i>Apply</button>
                                  </div>
                               </form>
                            </div>
                         </div>
                      </div>
-                     <div className="border p-md-4 cart-totals ml-30">
+
+                     <div className="border p-md-4 cart-totals ml-30" style={{ minHeight: "550px" }}>
                         <div className="table-responsive">
                            <table className="table no-border">
                               <tbody>
@@ -155,10 +274,12 @@ export const Cart = () => {
                                     <td className="cart_total_amount">
                                        <h5 className="text-heading text-end">Free </h5></td></tr> <tr>
                                     <td className="cart_total_label">
-                                       <h6 className="text-muted">Estimate htmlFor</h6>
+                                       <h6 className="text-muted">Discount</h6>
                                     </td>
                                     <td className="cart_total_amount">
-                                       <h5 className="text-heading text-end">United Kingdom </h5></td></tr> <tr>
+                                       <h5 className="text-heading text-end"> - ${(totalCart - totalCartAfterDiscount).toFixed(2)}</h5></td>
+                                 </tr>
+                                 <tr>
                                     <td scope="col" colSpan={2}>
                                        <div className="divider-2 mt-10 mb-10"></div>
                                     </td>
@@ -168,13 +289,40 @@ export const Cart = () => {
                                        <h6 className="text-muted">Total</h6>
                                     </td>
                                     <td className="cart_total_amount">
-                                       <h4 className="text-brand text-end">${totalCart}</h4>
+                                       <h4 className="text-brand text-end">${totalCartAfterDiscount}</h4>
                                     </td>
                                  </tr>
                               </tbody>
                            </table>
                         </div>
-                        <a href="#" className="btn mb-20 w-100">Proceed To CheckOut<i className="fi-rs-sign-out ml-15"></i></a>
+
+                        <div className="custome-checkbox mb-50 d-flex ">
+                           <div onClick={() => setCardMethod(false)}>
+                              <input className="form-check-input" checked={!cardMethod} type="checkbox" name="CashPayment" />
+                              <label className="form-check-label" ><span>Cash Payment</span></label>
+                           </div>
+                           <br />
+                           <div className="ml-50" onClick={() => setCardMethod(true)}>
+                              <input className="form-check-input" checked={cardMethod} type="checkbox" name="CardPayment" />
+                              <label className="form-check-label"><span>Credit Card Payment</span></label>
+                           </div>
+                        </div>
+                        {cardMethod || sdkLoading ? (
+                           <div className="paypal">
+                              <PayPalButton
+                                 amount={totalCartAfterDiscount}
+                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                 onSuccess={(_details: any, data: any) => {
+                                    dispatch(cashOrderByPaypal({ COD: false, payment_id: data.orderID }))
+                                 }}
+                                 onError={() => {
+                                    alert("Transaction error");
+                                 }}
+                              />
+                           </div>) :
+                           <button type="button" onClick={handleCheckOut} className="btn mb-20 w-100">Proceed To CheckOut<i className="fi-rs-sign-out ml-15"></i></button>
+                        }
+
                      </div>
                   </div>
                </div>

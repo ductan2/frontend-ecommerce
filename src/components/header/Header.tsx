@@ -1,6 +1,9 @@
 import { Link, useLocation } from "react-router-dom"
 import { useState, useEffect } from "react"
 import Search from "../search/Search";
+import { RootState, useAppDispatch } from "../../store/store";
+import { getInfoUser } from "../../features/user/userSlice";
+import { useSelector } from "react-redux";
 
 
 
@@ -9,11 +12,11 @@ interface Props {
    totalCartItems: number;
    totalWishlistItems: number;
 }
-export const Header = ({ toggleClick,totalCartItems,totalWishlistItems }: Props) => {
+export const Header = ({ toggleClick, totalCartItems, totalWishlistItems }: Props) => {
    const [isToggled, setToggled] = useState(false);
    const [scroll, setScroll] = useState(0);
+   const dispatch = useAppDispatch();
 
- 
    useEffect(() => {
       document.addEventListener("scroll", () => {
          const scrollCheck: number = (window.scrollY >= 100) ? 1 : 0;
@@ -23,8 +26,11 @@ export const Header = ({ toggleClick,totalCartItems,totalWishlistItems }: Props)
       });
    });
    const location = useLocation(); // get slug
-   
-
+   const { user } = useSelector((state: RootState) => state.user)
+   const token = localStorage.getItem("token");
+   useEffect(() => {
+      if (token) dispatch(getInfoUser())
+   }, [dispatch, token])
 
    function checkActiveUrl(item: string) {
       return item === location.pathname;
@@ -110,7 +116,11 @@ export const Header = ({ toggleClick,totalCartItems,totalWishlistItems }: Props)
                                     </div></Link>
                                     <Link to="/page-account"><div>
                                        <span className="lable ml-0">
-                                          Account
+                                          {user && user._id ? user.lastname + " " + user.firstname : (
+                                             <Link to={"/login"}>
+                                                <span className="lable ml-0">Login</span>
+                                             </Link>
+                                          )}
                                        </span>
                                     </div></Link>
                                     <div className="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
@@ -126,20 +136,10 @@ export const Header = ({ toggleClick,totalCartItems,totalWishlistItems }: Props)
                                              <Link to="/page-account"><div>
                                                 <i className="fi fi-rs-location-alt mr-10"></i>
                                                 Order Tracking
-                                             </div></Link>
+                                             </div>
+                                             </Link>
                                           </li>
-                                          <li>
-                                             <Link to="/page-account"><div>
-                                                <i className="fi fi-rs-label mr-10"></i>
-                                                My Voucher
-                                             </div></Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/shop-wishlist"><div>
-                                                <i className="fi fi-rs-heart mr-10"></i>
-                                                My Wishlist
-                                             </div></Link>
-                                          </li>
+
                                           <li>
                                              <Link to="/page-account"><div>
                                                 <i className="fi fi-rs-settings-sliders mr-10"></i>
@@ -356,93 +356,7 @@ export const Header = ({ toggleClick,totalCartItems,totalWishlistItems }: Props)
                                        </span>
                                     </div>
                                  </Link>
-                                 <div className="cart-dropdown-wrap cart-dropdown-hm2">
-                                    <ul>
-                                       <li>
-                                          <div className="shopping-cart-img">
-                                             <Link to="/shop">
-                                                <div>
-                                                   <img
-                                                      alt="Evara"
-                                                      src="/assets/imgs/shop/thumbnail-3.jpg"
-                                                   />
-                                                </div>
-                                             </Link>
-                                          </div>
-                                          <div className="shopping-cart-title">
-                                             <h4>
-                                                <Link to="/shop">
-                                                   <div>
-                                                      Plain
-                                                      Striola
-                                                      Shirts
-                                                   </div>
-                                                </Link>
-                                             </h4>
-                                             <h3>
-                                                <span>1 × </span>
-                                                $800.00
-                                             </h3>
-                                          </div>
-                                          <div className="shopping-cart-delete">
-                                             <Link to="/#">
-                                                <div>
-                                                   <i className="fi-rs-cross-small"></i>
-                                                </div>
-                                             </Link>
-                                          </div>
-                                       </li>
-                                       <li>
-                                          <div className="shopping-cart-img">
-                                             <Link to="/shop">
-                                                <div>
-                                                   <img
-                                                      alt="Evara"
-                                                      src="/assets/imgs/shop/thumbnail-4.jpg"
-                                                   />
-                                                </div>
-                                             </Link>
-                                          </div>
-                                          <div className="shopping-cart-title">
-                                             <h4>
-                                                <Link to="/shop">
-                                                   <div>
-                                                      Macbook Pro
-                                                      2022
-                                                   </div>
-                                                </Link>
-                                             </h4>
-                                             <h3>
-                                                <span>1 × </span>
-                                                $3500.00
-                                             </h3>
-                                          </div>
-                                          <div className="shopping-cart-delete">
-                                             <Link to="/#">
-                                                <div>
-                                                   <i className="fi-rs-cross-small"></i>
-                                                </div>
-                                             </Link>
-                                          </div>
-                                       </li>
-                                    </ul>
-                                    <div className="shopping-cart-footer">
-                                       <div className="shopping-cart-total">
-                                          <h4>
-                                             Total
-                                             <span>$383.00</span>
-                                          </h4>
-                                       </div>
-                                       <div className="shopping-cart-button">
-                                          <Link to="/shop-cart">
-                                             <div>View cart</div>
-                                          </Link>
-                                          <Link to="/shop-checkout">
-                                             <div>Checkout</div>
-                                          </Link>
-                                       </div>
-                                    </div>
-                                 </div>
+
                               </div>
                               <div className="header-action-icon-2 d-block d-lg-none">
                                  <div

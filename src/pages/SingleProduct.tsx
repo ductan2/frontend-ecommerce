@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { RootState, useAppDispatch } from "../store/store"
 import { AiOutlineCheck } from "react-icons/ai"
 import { useParams } from "react-router-dom"
-import { getAProduct } from "../features/product/productSlice"
+import { addToWishList, getAProduct } from "../features/product/productSlice"
 import { useSelector } from "react-redux"
 import { Loading } from "../components/loading/Loading"
 import { ImageWrap } from "../components/ImageWrap/ImageWrap"
@@ -20,7 +20,7 @@ export const SingleProduct = () => {
    useEffect(() => {
       dispatch(getAProduct(id as string))
    }, [dispatch, id])
-
+   
    const { dataItem, isLoading } = useSelector((state: RootState) => state.products)
 
    //event click function handleColor 
@@ -103,7 +103,7 @@ export const SingleProduct = () => {
                                        </div>
                                        <div className="product-extra-link2">
                                           <button type="submit" className="button button-add-to-cart"><i className="fi-rs-shopping-cart"></i>Add to cart</button>
-                                          <a aria-label="Add To Wishlist" className="action-btn hover-up" href="shop-wishlist.html"><i className="fi-rs-heart"></i></a>
+                                          <div aria-label="Add To Wishlist" className="action-btn hover-up cursor-pointer" onClick={()=>dispatch(addToWishList(dataItem._id))}><i className="fi-rs-heart"></i></div>
                                        </div>
                                     </div>
                                  </form>
@@ -127,7 +127,7 @@ export const SingleProduct = () => {
                               <ul className="nav nav-tabs text-uppercase">
 
                                  <li className="nav-item">
-                                    <a className="nav-link" id="Reviews-tab" data-bs-toggle="tab" href="#Reviews">Reviews (3)</a>
+                                    <a className="nav-link" id="Reviews-tab" data-bs-toggle="tab" href="#Reviews">Reviews ({dataItem.ratings?.length} )</a>
                                  </li>
                               </ul>
                               <div className="tab-content shop_info_tab entry-main-content">
