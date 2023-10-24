@@ -31,7 +31,7 @@ export const PopularProduct = () => {
             <h1 className='mb-30'>Trendings products</h1>
             <div className="row">
                {procTrending.map((item: Product) => (
-                  <ProductItem product={item} />
+                  <ProductItem key={item._id} product={item} />
                ))}
             </div>
          </div>

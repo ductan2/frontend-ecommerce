@@ -150,6 +150,7 @@ export const userSlice = createSlice({
             state.isLoading = false;
             state.isError = false
             state.isSuccess = true;
+            console.log(action.payload)
             localStorage.setItem("token", action.payload.token)
             if (state.isSuccess === true) {
                toast.success("Login successfully !", {

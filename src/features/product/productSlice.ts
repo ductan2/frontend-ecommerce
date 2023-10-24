@@ -6,14 +6,13 @@ import { toast } from "react-toastify";
 
 
 export interface AsyncStateWithPage<T> extends AsyncState<T> {
-   itemPerPage: number;
-   totalItem: number
-   page?: number,
-   showPagination: number,
    filterData: T[],
+   currentPage: number,
+   limitPerPage: number,
+   totalFilteredPages: number,
+   showPagination: number
 }
 
-const ITEMPERPAGE = 1;
 const initialState: AsyncStateWithPage<Product> = {
    data: [],
    filterData: [],
@@ -21,17 +20,19 @@ const initialState: AsyncStateWithPage<Product> = {
    isLoading: false,
    isSuccess: false,
    message: "",
-   itemPerPage: ITEMPERPAGE,
-   totalItem: 0,
    dataItem: {} as Product,
+   currentPage: 1,
+   limitPerPage: 1,
+   totalFilteredPages: 1,
    showPagination: 3,
 }
-export const getAllProducts = createAsyncThunk<{ data: Product[], total: number }, { query?: string, page?: number, limit?: number }>("products/get-all-product", async ({ query, page, limit = ITEMPERPAGE }) => {
+
+export const getAllProducts = createAsyncThunk<Product>("products/get-all", async (_, thunkAPI) => {
    try {
-      const response = await productService.getAllProducts(query, page, limit);
+      const response = await productService.getAllProducts();
       return response.data.result;
    } catch (error) {
-      return error
+      return thunkAPI.rejectWithValue(error);
    }
 });
 export const addToWishList = createAsyncThunk<Product, string>("products/add-to-wish", async (product_id, thunkAPI) => {
@@ -72,6 +73,18 @@ export const productSlice = createSlice({
    name: 'product',
    initialState: initialState,
    reducers: {
+      filterProducts: (state, action) => {
+         const { selectedBrand, selectedCategories, priceRange } = action.payload;
+         console.log(state.filterData)
+         state.filterData = state.data.filter(item => {
+            const brandMatch = selectedBrand ? item.brand === selectedBrand : true;
+            const categoryMatch = selectedCategories.every((category: string) => item.category.some(cat => cat.title === category));
+            const priceMatch = item.price >= priceRange.min && item.price <= priceRange.max;
+
+            return brandMatch && categoryMatch && priceMatch;
+         });
+         state.totalFilteredPages = Math.ceil(state.filterData.length / state.limitPerPage);
+      },
       sortProducts: (state, action) => {
          switch (action.payload) {
             case 'title':
@@ -90,17 +103,15 @@ export const productSlice = createSlice({
                state.filterData.sort((a, b) => b.created_at.localeCompare(a.created_at));
                break;
          }
+    
       },
-      filterProducts: (state, action) => {
-         const { selectedBrand, selectedCategories, priceRange } = action.payload;
-
-         state.filterData = state.data.filter(item => {
-            const brandMatch = selectedBrand ? item.brand === selectedBrand : true;
-            const categoryMatch = selectedCategories.every((category:string) => item.category.some(cat => cat.title === category));
-            const priceMatch = item.price >= priceRange.min && item.price <= priceRange.max;
-
-            return brandMatch && categoryMatch && priceMatch;
-         });
+      changePage: (state, action) => {
+         state.currentPage = action.payload;
+      },
+      clear: (state) => {
+         state.filterData = state.data;
+         state.currentPage = 1;
+         state.totalFilteredPages = Math.ceil(state.filterData.length / state.limitPerPage);
       }
    },
    extraReducers(builder) {
@@ -108,16 +119,17 @@ export const productSlice = createSlice({
          state.isLoading = true;
       })
          .addCase(getAllProducts.fulfilled, (state, action) => {
-            const data = action.payload.data;
+
             state.isLoading = false;
             state.isError = false
             state.isSuccess = true;
 
-            if (Array.isArray(data)) {
-               state.data = data;
+            if (Array.isArray(action.payload)) {
+               state.data = action.payload;
+               state.filterData = action.payload;
+               state.totalFilteredPages = Math.ceil(state.data.length / state.limitPerPage);
             }
-            state.totalItem = action.payload.total;
-            state.page = Math.ceil(state.totalItem / state.itemPerPage);
+
          })
          .addCase(getAllProducts.rejected, (state, action) => {
             state.isLoading = false;
@@ -192,5 +204,5 @@ export const productSlice = createSlice({
 
    }
 })
-export const { sortProducts, filterProducts } = productSlice.actions;
+export const { sortProducts, filterProducts, changePage, clear } = productSlice.actions;
 export default productSlice.reducer;

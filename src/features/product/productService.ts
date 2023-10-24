@@ -3,9 +3,8 @@ import { auth } from "../../utils/auth";
 import http from "../../utils/http";
 
 
-const getAllProducts = async (query?: string, page?: number, limit?: number) => {
-   if (!query) return http.get(`/products/get-all-products?page=${page}&limit=${limit}`)
-   return http.get(`/products/get-all-products?${query}&page=${page}&limit=${limit}`,)
+const getAllProducts = async () => {
+   return http.get(`/products/get-all-products-no-filter`)
 }
 const getAProduct = async (productId: string) => {
    return http.get(`/products/${productId}`)

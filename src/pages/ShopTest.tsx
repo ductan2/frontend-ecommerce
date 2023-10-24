@@ -1,53 +1,41 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { RootState, useAppDispatch } from "../store/store"
-import { filterProducts, getAllProducts, sortProducts } from "../features/product/productSlice"
+import { changePage, clear, filterProducts, getAllProducts, sortProducts } from "../features/product/productSlice"
 import { useSelector } from "react-redux"
 import { Loading } from "../components/loading/Loading"
 import { ProductItem } from "../components/products/ProductItem"
-import { Pagination } from "../components/pagination/Pagination"
+
 import { RangePrice } from "../components/filter/RangePrice"
 import { NewProduct } from "../components/products/NewProduct"
 import { getAllBrand } from "../features/brand/brandSlice"
 import { getAllCategoryProduct } from "../features/categoryProduct/categoryProcSlice"
 import { useFilter } from "../hooks/useFilter"
-import { usePagination } from "../hooks/usePagination"
+import { Pagination } from "../components/pagination/Pagination"
+
 export const ShopTest = () => {
-   const { data, isLoading, totalItem, itemPerPage, showPagination, filterData } = useSelector((state: RootState) => state.products);
+   const { data, isLoading, filterData, currentPage, showPagination, totalFilteredPages, limitPerPage } = useSelector((state: RootState) => state.products);
    const brands = useSelector((state: RootState) => state.brands.data);
    const categoryProduct = useSelector((state: RootState) => state.categoryProc.data);
    const dispatch = useAppDispatch();
    const [price, setPrice] = useState({ value: { min: 0, max: 500 } });
+   const [pages, setPages] = useState<number>(Math.ceil(totalFilteredPages / limitPerPage));
    const [pagination, setPagination] = useState<number[]>([]);
    const [sort, setSort] = useState('')
    const [products, setProducts] = useState(data || []);
-   const { currentPage, pages, next, prev, setCurrentPage } = usePagination(totalItem, itemPerPage);
    const { selectedBrand, setSelectedBrand, selectedCategories, setSelectedCategories } = useFilter(data || []);
    useEffect(() => {
       dispatch(getAllBrand());
       dispatch(getAllCategoryProduct());
-      dispatch(getAllProducts({ page: currentPage, limit: itemPerPage }));
-   }, [dispatch, currentPage, itemPerPage]);
+      dispatch(getAllProducts());
+   }, [dispatch]);
 
 
-   useEffect(() => {
-      if (data) {
-         setProducts(data);
-         cratePagination();
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [data]);
+
    useEffect(() => {
       if (filterData) {
          setProducts(filterData);
       }
    }, [filterData]);
-   const cratePagination = () => {
-      const arr: number[] = new Array(Math.ceil(totalItem / itemPerPage))
-         .fill(1)
-         .map((_, idx) => idx + 1);
-
-      setPagination(arr);
-   };
 
 
 
@@ -66,9 +54,9 @@ export const ShopTest = () => {
       }
       setSelectedCategories(newSelectedCategories);
    };
-   const handleActive = useCallback((item: number) => {
-      setCurrentPage(item);
-   }, [setCurrentPage]);
+   const handleActive = (item: number) => {
+      dispatch(changePage(item));
+   };
 
    const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
       dispatch(sortProducts(e.target.value));
@@ -83,11 +71,36 @@ export const ShopTest = () => {
       };
       dispatch(filterProducts(filterConditions));
    };
+   const next = () => {
+      dispatch(changePage(currentPage + 1));
+   }
+   const prev = () => {
+      dispatch(changePage(currentPage - 1));
+   }
+   const cratePagination = () => {
+      const arr: number[] = new Array(Math.ceil(totalFilteredPages / limitPerPage))
+         .fill(1)
+         .map((_, idx) => idx + 1);
+
+      setPagination(arr);
+      setPages(Math.ceil(totalFilteredPages / limitPerPage));
+   };
+   const clearFilter = () => {
+      setPrice({ value: { min: 0, max: 500 } });
+      setSelectedBrand('');
+      setSelectedCategories([]);
+      dispatch(clear());
+   }
+   useEffect(() => {
+      if (filterData) {
+         cratePagination();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [filterData])
    const start = Math.floor((currentPage - 1) / showPagination) * showPagination;
    const end = start + showPagination;
+
    const getPaginationGroup = pagination.slice(start, end);
-
-
 
    // Check for isLoading state right away
    if (isLoading) return <Loading isFull />
@@ -135,9 +148,9 @@ export const ShopTest = () => {
                                  </div>
                               </div>
                            </div>
-                           <div className="d-flex gap-5">
-                              <button onClick={handleFilter} className="btn btn-sm btn-default"><i className="fi-rs-filter mr-5"></i> Fillter</button>
-                              <button onClick={() => setProducts(data)} className="btn btn-sm btn-white"> Clear</button>
+                           <div className="d-flex gap-3">
+                              <button onClick={handleFilter} className="btn btn-sm btn-default"> Fillter</button>
+                              <button onClick={clearFilter} className="btn btn-sm btn-white"> Clear</button>
                            </div>
                         </div>
                         <NewProduct data={data.slice(0, 3)} />
@@ -157,7 +170,7 @@ export const ShopTest = () => {
                   <div className="col-lg-4-5">
                      <div className="shop-product-fillter mt-20">
                         <div className="totall-product">
-                           <p>We found <strong className="text-brand">{totalItem}</strong> items for you!</p>
+                           <p>We found <strong className="text-brand">{filterData.length}</strong> items for you!</p>
                         </div>
                         <div className="sort-by-product-area ">
                            <div className="sort-by-cover">
@@ -172,21 +185,12 @@ export const ShopTest = () => {
                         </div>
                      </div>
                      <div className="row product-grid">
-                        {products.map((item) => (
+                        {products.slice(currentPage - 1, currentPage + limitPerPage - 1).map((item) => (
                            <ProductItem key={item._id} product={item} />
                         ))}
                      </div>
-                     <Pagination
-                        getPaginationGroup={
-                           getPaginationGroup
-                        }
-                        currentPage={currentPage}
-                        pages={pages}
-                        next={next}
-                        prev={prev}
-                        handleActive={handleActive}
-                     />
-
+                     <Pagination getPaginationGroup={getPaginationGroup}
+                        handleActive={handleActive} pages={pages} currentPage={currentPage} next={next} prev={prev} />
                   </div>
 
                </div>
