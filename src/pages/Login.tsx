@@ -1,9 +1,9 @@
-import { Link, Navigate, useNavigate } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
 import { RootState, useAppDispatch } from "../store/store"
 import { UserLogin } from "../types/user"
 import { useFormik } from "formik"
 import * as yup from "yup"
-import { getInfoUser, loginUser } from "../features/user/userSlice"
+import { loginUser } from "../features/user/userSlice"
 import { InputCustom } from "../components/input/InputCustom"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
@@ -14,7 +14,7 @@ const loginShema = yup.object().shape({
 })
 export const Login = () => {
    const dispatch = useAppDispatch()
-   const navigate = useNavigate()
+
    const formik = useFormik<UserLogin>({
       initialValues: {
          email: "",
@@ -24,13 +24,14 @@ export const Login = () => {
       onSubmit: (values) => {
          setTimeout(() => {
             dispatch(loginUser(values))
-            navigate('/')
          }, 500)
       }
    })
-   const { errorResponse, isLoading,user } = useSelector((state: RootState) => state.user)
+   const { errorResponse, isLoading, user } = useSelector((state: RootState) => state.user)
+
    useEffect(() => {
       if (errorResponse) {
+         
          errorResponse.forEach((error) => {
             formik.setFieldError(error.path as string, error.error)
          })
@@ -38,10 +39,7 @@ export const Login = () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [errorResponse])
 
-   useEffect(() => {
-      dispatch(getInfoUser())
-   }, [dispatch])
-   if(user._id) {
+   if (user && user._id) {
       return <Navigate to="/" />
    }
 

@@ -5,6 +5,7 @@ import productReducer from "../features/product/productSlice"
 import paymentReducer from "../features/payment/paymentSlice"
 import brandReducer from "../features/brand/brandSlice"
 import categoryProcReducer from "../features/categoryProduct/categoryProcSlice"
+import blogReducer from "../features/blog/blogSlice"
 export const store = configureStore({
    reducer: {
       user: userReducer,
@@ -12,6 +13,7 @@ export const store = configureStore({
       payment:paymentReducer,
       brands:brandReducer,
       categoryProc:categoryProcReducer,
+      blogs:blogReducer
    },
 })
 export type RootState = ReturnType<typeof store.getState>

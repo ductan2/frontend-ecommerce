@@ -1,8 +1,19 @@
+import { useEffect } from "react"
+import { useSelector } from "react-redux"
+import { RootState, useAppDispatch } from "../store/store"
+import { getAllBlog } from "../features/blog/blogSlice"
+import { UploadImageType } from "../types/commom"
 
 export const Blog = () => {
+   const { data } = useSelector((state: RootState) => state.blogs)
+   const dispatch = useAppDispatch()
+   useEffect(() => {
+      dispatch(getAllBlog())
+   }, [dispatch])
+   console.log("blogs: ", data)
    return (
       <main className="main mt-50">
-         
+
          <div className="page-content ">
             <div className="container">
                <div className="row">
@@ -11,7 +22,7 @@ export const Blog = () => {
                         <div className="totall-product">
                            <h2>
                               <img className="w-36px mr-10" src="assets/imgs/theme/icons/category-1.svg" alt="" />
-                                 Blog
+                              Blog
                            </h2>
                         </div>
                         <div className="sort-by-product-area">
@@ -56,29 +67,30 @@ export const Blog = () => {
                      </div>
                      <div className="loop-grid">
                         <div className="row">
-                           <article className="col-xl-3 col-lg-4 col-md-6 text-center hover-up mb-30 animated">
-                              <div className="post-thumb">
-                                 <a href="blog-post-right.html">
-                                    <img className="border-radius-15" src="assets/imgs/blog/blog-1.png" alt="" />
-                                 </a>
-                                 <div className="entry-meta">
-                                    <a className="entry-meta meta-2" href="blog-category-grid.html"><i className="fi-rs-heart"></i></a>
-                                 </div>
-                              </div>
-                              <div className="entry-content-2">
-                                 <h6 className="mb-10 font-sm"><a className="entry-meta text-muted" href="blog-category-grid.html">Side Dish</a></h6>
-                                 <h4 className="post-title mb-15">
-                                    <a href="blog-post-right.html">The Intermediate Guide to Healthy Food</a>
-                                 </h4>
-                                 <div className="entry-meta font-xs color-grey mt-10 pb-10">
-                                    <div>
-                                       <span className="post-on mr-10">25 April 2022</span>
-                                       <span className="hit-count has-dot mr-10">126k Views</span>
-                                       <span className="hit-count has-dot">4 mins read</span>
+                           {data.map((item) => (
+                              <article className="col-xl-3 col-lg-4 col-md-6 text-center hover-up mb-30 animated">
+                                 <div className="post-thumb">
+                                    <a href="blog-post-right.html">
+                                       <img className="border-radius-15" src={(item.images as UploadImageType).url || item.images as string} alt="" />
+                                    </a>
+                                    <div className="entry-meta">
+                                       <a className="entry-meta meta-2" href="blog-category-grid.html"><i className="fi-rs-heart"></i></a>
                                     </div>
                                  </div>
-                              </div>
-                           </article>
+                                 <div className="entry-content-2">
+                                    <h4 className="post-title mb-15">
+                                       <a href="blog-post-right.html">{item.title.length > 30 ? item.title.substring(0, 30) + "..." : item.title}</a>
+                                    </h4>
+                                    <div className="entry-meta font-xs color-grey mt-10 pb-10">
+                                       <div>
+                                          <span className="post-on mr-10">{item.created_at}</span>
+                                          <span className="hit-count has-dot mr-10">{item.numViews} Views</span>
+                                          <span className="hit-count has-dot">{item.author}</span>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </article>
+                           ))}
                            <article className="col-xl-3 col-lg-4 col-md-6 text-center hover-up mb-30 animated">
                               <div className="post-thumb">
                                  <a href="blog-post-right.html">

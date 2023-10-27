@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { Product } from "../../types/product";
 import { AxiosResponse } from "axios";
 
+
 interface AsyncStateWithWishList<T> extends AsyncState<T> {
    wishlist: Product[],
    cart: CartItem[],
@@ -156,6 +157,7 @@ export const userSlice = createSlice({
                toast.success("Login successfully !", {
                   position: toast.POSITION.TOP_RIGHT
                });
+               window.location.href = "/"
             }
 
          })
@@ -269,17 +271,17 @@ export const userSlice = createSlice({
          .addCase(getInfoUser.pending, (state) => {
             state.isLoading = true;
          })
-         .addCase(getInfoUser.fulfilled, (state,action) => {
+         .addCase(getInfoUser.fulfilled, (state, action) => {
             state.isLoading = false;
             state.isError = false
             state.isSuccess = true;
-            state.user=action.payload
+            state.user = action.payload
          })
          .addCase(getInfoUser.rejected, (state) => {
             state.isLoading = false;
             state.isError = true
             state.isSuccess = false;
-          
+
          })
    },
 })

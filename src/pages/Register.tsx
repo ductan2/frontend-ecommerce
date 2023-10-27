@@ -1,5 +1,5 @@
 import { useFormik } from "formik"
-import { Link } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
 import * as yup from "yup"
 import { UserRegister } from "../types/user"
 import { InputCustom } from "../components/input/InputCustom"
@@ -37,7 +37,7 @@ export const Register = () => {
          }, 500)
       }
    })
-   const { errorResponse, isLoading } = useSelector((state: RootState) => state.user)
+   const { errorResponse, isLoading, user } = useSelector((state: RootState) => state.user)
    useEffect(() => {
       if (errorResponse) {
          errorResponse.forEach((error) => {
@@ -47,6 +47,9 @@ export const Register = () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [errorResponse])
 
+   if (user && user._id) {
+      return <Navigate to="/" />
+   }
 
    return (
       <>

@@ -26,8 +26,8 @@ class Http {
                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                const data = error.response?.data as object | null | any | string
              
-               if (data.message === "Token is invalid" && data.status === 401) {
-                  // localStorage.removeItem("token")
+               if (data.message === "Token has expired" && data.status === 401) {
+                  localStorage.removeItem("token")
                }
             }
             return Promise.reject(error);
