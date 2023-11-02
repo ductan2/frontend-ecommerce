@@ -301,11 +301,13 @@ h6.post-title {
 		background: #fff;
 		overflow: hidden;
 	}
-	.entry-content {
-		padding: 30px;
-	}
+	
 	.entry-content-2 {
 		padding: 20px 30px;
+		display: flex;
+		flex-direction: column;	
+		justify-content: space-between;
+		min-height: 175px;
 	}
 	&.loop-list {
 		position: relative;

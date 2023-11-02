@@ -11,6 +11,12 @@ import { Cart } from "./pages/Cart"
 import { Blog } from "./pages/Blog"
 import { PrivateRoutes } from "./routing/PrivateRoutes"
 import { ShopTest } from "./pages/ShopTest"
+import SingleBlog from "./pages/SingleBlog"
+import MyAccount from "./pages/MyAccount"
+import Contact from "./pages/Contact"
+import UpdateProfile from "./pages/profile/UpdateProfile"
+import OrderList from "./pages/profile/OrderList"
+import AccountAddress from "./pages/profile/AccountAddress"
 
 function App() {
 
@@ -22,17 +28,30 @@ function App() {
           <Route path="/" element={<Layout />} >
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
-            <Route path="/shop" element={<ShopTest />} />
-            <Route path="/wishlist" element={<PrivateRoutes><Wishlist /></PrivateRoutes>} />
-            <Route path="/shop/product/:id" element={<SingleProduct />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/cart"
+            <Route path="shop" element={<ShopTest />} />
+            <Route path="wishlist" element={<PrivateRoutes><Wishlist /></PrivateRoutes>} />
+            <Route path="shop/product/:id" element={<SingleProduct />} />
+            <Route path="blog/:id" element={<SingleBlog />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="account" element={
+              <PrivateRoutes>
+                <MyAccount />
+              </PrivateRoutes>} >
+              <Route path="" index element={<UpdateProfile />}></Route>
+              <Route path="orders" element={<OrderList />}></Route>
+              <Route path="address" element={<AccountAddress />}></Route>
+            </Route>
+            <Route path="cart"
               element={<PrivateRoutes>
                 <Cart />
               </PrivateRoutes>} />
-            <Route path="/blog" element={<Blog />} />
+            <Route path="blog" element={<Blog />} />
           </Route>
+
+
+
         </Routes>
       </BrowserRouter>
     </>

@@ -240,6 +240,9 @@
     .product-content-wrap {
         padding: 0 20px 20px 20px;
         min-height: 210px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         .product-category {
             margin-bottom: 5px;
 
@@ -343,15 +346,18 @@
         .add-cart {
             cursor: pointer;
 
-            .add {
+            .views {
                 position        : relative;
-                display         : inline-block;
                 padding         : 6px 20px 6px 20px;
                 border-radius   : 4px;
                 background-color: $background-3;
                 font-size       : 14px;
                 font-weight     : 700;
-
+                margin-left: 5px;
+                margin-left: 10px;
+                display: flex;
+                align-items: center;
+                gap: 5px;
                 &:hover {
                     background-color: $color-brand;
                     color           : #fff;

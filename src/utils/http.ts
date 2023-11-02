@@ -1,5 +1,6 @@
 import axios, { type AxiosError, AxiosInstance } from "axios"
 import { server_url } from "./dir";
+import { toast } from "react-toastify";
 
 
 class Http {
@@ -20,15 +21,14 @@ class Http {
          },
          function (error: AxiosError) {
             if (error.response?.status !== 422) {
-               console.log(error.response?.status)
 
 
                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                const data = error.response?.data as object | null | any | string
-             
-               if (data.message === "Token has expired" && data.status === 401) {
+               if (data.message === "Token has expired" && data.status === 401 || data.message === "Token is valid") {
                   localStorage.removeItem("token")
                }
+               toast.error(data.error)
             }
             return Promise.reject(error);
          }

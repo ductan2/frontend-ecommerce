@@ -3,9 +3,11 @@ import { ratings } from "../../types/product"
 import moment from "moment"
 import { CommentStar } from "./CommentStar"
 import { debounce } from "debounce";
-import { useAppDispatch } from "../../store/store";
+import { RootState, useAppDispatch } from "../../store/store";
 import { ratingsProduct } from "../../features/product/productSlice";
 import { Loading } from "../loading/Loading";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 type Props = {
    product_id: string
    post: ratings[]
@@ -26,8 +28,9 @@ export const Comment = ({ post, product_id }: Props) => {
    const dispatch = useAppDispatch()
    useEffect(() => {
       const avg = post.reduce((total, item) => total + item.star, 0)
-      setAvgStar(avg as number / post.length)
+      setAvgStar(avg as number / post.length || 5)
    }, [post])
+   const { user } = useSelector((state: RootState) => state.user)
    useEffect(() => {
       if (post) {
          const one = post.filter(item => item.star === 1).length
@@ -49,6 +52,13 @@ export const Comment = ({ post, product_id }: Props) => {
    }, 500)
    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
+      console.log("🚀 ~ file: Comment.tsx:56 ~ handleSubmit ~ user:", user)
+      if (!user._id) {
+         toast.error("You can login to comment this post!", {
+            position: toast.POSITION.TOP_RIGHT
+         });
+         return;
+      }
       setIsLoad(true)
       setTimeout(() => {
          dispatch(ratingsProduct({ product_id, star: rating, comment }))
@@ -96,29 +106,29 @@ export const Comment = ({ post, product_id }: Props) => {
                         <div className="product-rate d-inline-block mr-15">
                            <div className="product-rating" style={{ width: avgStar * 20 + "%" }}></div>
                         </div>
-                        <h6>{avgStar.toFixed(2)} out of 5</h6>
+                        <h6>{avgStar !== 5 ? avgStar.toFixed(2) : 5} out of 5</h6>
                      </div>
                      <div className="progress">
                         <span>{star.five} star</span>
-                        <div className="progress-bar" role="progressbar" style={{ width: star.five / post.length * 100 + "%" }} aria-valuenow={50} aria-valuemin={0} aria-valuemax={100}>{(star.five / post.length * 100).toFixed(2)}%</div>
+                        <div className="progress-bar" role="progressbar" style={{ width: star.five / post.length * 100 + "%" }} aria-valuenow={50} aria-valuemin={0} aria-valuemax={100}>{((star.five / post.length * 100) || 0).toFixed(2)}%</div>
                      </div>
                      <div className="progress">
                         <span>{star.four} star</span>
-                        <div className="progress-bar" role="progressbar" style={{ width: star.four / post.length * 100 + "%" }} aria-valuenow={25} aria-valuemin={0} aria-valuemax={100}>{(star.four / post.length * 100).toFixed(2)}%</div>
+                        <div className="progress-bar" role="progressbar" style={{ width: star.four / post.length * 100 + "%" }} aria-valuenow={25} aria-valuemin={0} aria-valuemax={100}>{((star.four / post.length * 100) || 0).toFixed(2)}%</div>
                      </div>
                      <div className="progress">
                         <span>{star.three} star</span>
-                        <div className="progress-bar" role="progressbar" style={{ width: star.three / post.length * 100 + "%" }} aria-valuenow={45} aria-valuemin={0} aria-valuemax={100}>{(star.three / post.length * 100).toFixed(2)}%</div>
+                        <div className="progress-bar" role="progressbar" style={{ width: star.three / post.length * 100 + "%" }} aria-valuenow={45} aria-valuemin={0} aria-valuemax={100}>{((star.three / post.length * 100) || 0).toFixed(2)}%</div>
                      </div>
                      <div className="progress">
                         <span>{star.two} star</span>
-                        <div className="progress-bar" role="progressbar" style={{ width: star.two / post.length * 100 + "%" }} aria-valuenow={65} aria-valuemin={0} aria-valuemax={100}>{(star.two / post.length * 100).toFixed(2)}%</div>
+                        <div className="progress-bar" role="progressbar" style={{ width: star.two / post.length * 100 + "%" }} aria-valuenow={65} aria-valuemin={0} aria-valuemax={100}>{((star.two / post.length * 100) || 0).toFixed(2)}%</div>
                      </div>
                      <div className="progress mb-30">
                         <span>{star.one} star</span>
                         <div className="progress-bar" role="progressbar" style={{ width: star.one / post.length * 100 + "%" }}
                            aria-valuenow={85} aria-valuemin={0} aria-valuemax={100}
-                        >{(star.one / post.length * 100).toFixed(2)}%</div>
+                        >{((star.one / post.length * 100) || 0).toFixed(2)}%</div>
                      </div>
                   </div>
                </div>

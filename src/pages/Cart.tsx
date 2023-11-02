@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom"
 import { RootState, useAppDispatch } from "../store/store"
 import { useEffect, useState } from "react";
-import { appliedCoupon, cashOrderByPaypal, emptyCart, getCart, removeToCartById, updateCartQuantity } from "../features/user/userSlice";
+import { appliedCoupon, cashOrderByPaypal, emptyCart, getCart, getInfoUser, removeToCartById, updateCartQuantity, updateUser } from "../features/user/userSlice";
 import { useSelector } from "react-redux";
 import { Loading } from "../components/loading/Loading";
 import { debounce } from "debounce";
 import { PayPalButton } from "react-paypal-button-v2";
 import { getConfigPayment } from "../features/payment/paymentSlice";
 import { SelectCustom } from "../components/select/SelectCustom";
-
+import { toast } from "react-toastify";
+// import random id 
+import { v4 as uuidv4 } from "uuid";
+import { Address } from "../types/user";
 
 
 export const Cart = () => {
@@ -22,6 +25,7 @@ export const Cart = () => {
    const [provinceList, setProviceList] = useState([])
    const [districtList, setDistrictList] = useState([])
    const [wardsList, setWardsList] = useState([])
+   const [currentAddress, setCurrentAddress] = useState<Address>({});
    const [coupon, setCoupon] = useState<string>("")
    const [address, setAddress] = useState<{ province: string, district: string, wards: string }>({
       province: "",
@@ -33,6 +37,7 @@ export const Cart = () => {
    }, [dispatch])
    const { cart, isLoading } = useSelector((state: RootState) => state.user)
    const { data: dataPayment } = useSelector((state: RootState) => state.payment)
+   const { user } = useSelector((state: RootState) => state.user)
    useEffect(() => {
       if (cart) {
          const total = cart.reduce((total, item) => {
@@ -75,17 +80,23 @@ export const Cart = () => {
          }, 200)
       }, 500)
    }
-   const updateCart = debounce((e: React.ChangeEvent<HTMLInputElement>, id: string) => {
-      const value = e.target.value
+   const updateCart = debounce((e: React.ChangeEvent<HTMLInputElement>, id: string, quantity: number) => {
+      let value = e.target.value
+      if (Number(value) < 1) value = "1";
+      if (Number(value) > quantity) value = quantity.toString()
       if (typeof value === 'string') {
          dispatch(updateCartQuantity({ id, amount: Number(value) }))
          setTimeout(() => {
             dispatch(getCart())
-         }, 200)
+         }, 500)
       }
    }, 500)
    const handleCheckOut = () => {
-      dispatch(cashOrderByPaypal({ COD: true }))
+      if (Object.keys(currentAddress).length === 0) {
+         toast.error("Please choose current address!")
+         return;
+      }
+      dispatch(cashOrderByPaypal({ COD: true, address: currentAddress }))
       setTimeout(() => {
          dispatch(getCart())
       }, 200)
@@ -150,8 +161,29 @@ export const Cart = () => {
          setAddress({ ...address, wards: e.target.value })
       }
    }
-   if (isLoading || !cart) return <Loading isFull />
+   const handleChangeAddress = (e: React.ChangeEvent<HTMLInputElement>, adr: Address) => {
+      if (e.target.checked) {
+         setCurrentAddress(adr)
+      }
+      else {
+         setCurrentAddress({})
+      }
+   }
+   const handleUpdateAddress = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      if (!address.district || !address.province || !address.wards) {
+         toast.error("Please enter your address")
+         return
+      }
 
+
+      dispatch(updateUser({ address: address })).then(() => {
+         setTimeout(() => {
+            dispatch(getInfoUser())
+         }, 500)
+      })
+   }
+   if (isLoading || !cart) return <Loading isFull />
    return (
       <>
          <main className="main">
@@ -200,8 +232,8 @@ export const Cart = () => {
                                        <div className="detail-extralink mr-15">
                                           <div className="input-number">
                                              {item.product.quantity > 0 ? <input type="number" defaultValue={item.amount} min={1}
-                                                max={item.product.quantity} onChange={(e) => updateCart(e, item._id)} /> :
-                                                <input type="number" defaultValue={item.amount} min={1} max={item.product.quantity} disabled />
+                                                max={item.product.quantity} onChange={(e) => updateCart(e, item._id, item.product.quantity)} /> :
+                                                <input type="number" defaultValue={item.amount} aria-valuemin={0} min={0} max={item.product.quantity} disabled />
                                              }
                                           </div>
                                        </div>
@@ -219,17 +251,22 @@ export const Cart = () => {
                      <div className="cart-action d-flex justify-content-between">
                         <Link to={"/shop"} className="btn "><i className="fi-rs-arrow-left mr-10"></i>Continue Shopping</Link>
                      </div>
-                     <div className="row">
-                        <div className="col-4">
-                           <SelectCustom defaultName={"Please enter your province"} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChangeValue(e, "province")} value={address.province} data={provinceList} />
+                     <form action="" onSubmit={handleUpdateAddress}>
+                        <div className="row flex " style={{ alignItems: "end" }}>
+                           <div className="col-3">
+                              <SelectCustom defaultName={"Please enter your province"} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChangeValue(e, "province")} value={address.province} data={provinceList} />
+                           </div>
+                           <div className="col-3">
+                              <SelectCustom defaultName={"Please enter your district"} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChangeValue(e, "district")} value={address.district} data={districtList} />
+                           </div>
+                           <div className="col-3">
+                              <SelectCustom defaultName={"Please enter your wards"} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChangeValue(e, "wards")} value={address.wards} data={wardsList} />
+                           </div>
+                           <div className="col-3">
+                              <button type="submit" className="btn ">Add address</button>
+                           </div>
                         </div>
-                        <div className="col-4">
-                           <SelectCustom defaultName={"Please enter your district"} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChangeValue(e, "district")} value={address.district} data={districtList} />
-                        </div>
-                        <div className="col-4">
-                           <SelectCustom defaultName={"Please enter your wards"} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChangeValue(e, "wards")} value={address.wards} data={wardsList} />
-                        </div>
-                     </div>
+                     </form>
 
                   </div>
 
@@ -292,18 +329,31 @@ export const Cart = () => {
                                        <h4 className="text-brand text-end">${totalCartAfterDiscount}</h4>
                                     </td>
                                  </tr>
+
                               </tbody>
                            </table>
                         </div>
-
-                        <div className="custome-checkbox mb-50 d-flex ">
+                        <br className="line" />
+                        <div>
+                           <h5>Delivery address</h5>
+                           {user.address !== undefined && user.address?.length > 0 && user.address?.map((adr) => {
+                              return <div key={uuidv4()} className="mt-3 ">
+                                 <input className="form-input-checkbox" type="checkbox"
+                                    onChange={(e) => handleChangeAddress(e, adr)}
+                                    name="address" checked={adr.id === currentAddress.id} />
+                                 <span>{adr.province + " " + adr.district + " " + adr.wards}</span>
+                              </div>
+                           })}
+                        </div>
+                        <br className="line" />
+                        <div className="custome-checkbox mb-50 mt-20 d-flex ">
                            <div onClick={() => setCardMethod(false)}>
-                              <input className="form-check-input" checked={!cardMethod} type="checkbox" name="CashPayment" />
+                              <input className="form-check-input" checked={!cardMethod} type="checkbox" readOnly name="CashPayment" />
                               <label className="form-check-label" ><span>Cash Payment</span></label>
                            </div>
                            <br />
                            <div className="ml-50" onClick={() => setCardMethod(true)}>
-                              <input className="form-check-input" checked={cardMethod} type="checkbox" name="CardPayment" />
+                              <input className="form-check-input" checked={cardMethod} type="checkbox" readOnly name="CardPayment" />
                               <label className="form-check-label"><span>Credit Card Payment</span></label>
                            </div>
                         </div>
@@ -313,7 +363,11 @@ export const Cart = () => {
                                  amount={totalCartAfterDiscount}
                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                  onSuccess={(_details: any, data: any) => {
-                                    dispatch(cashOrderByPaypal({ COD: false, payment_id: data.orderID }))
+                                    if (!currentAddress) {
+                                       toast.info("Please choose current address!")
+                                       return;
+                                    }
+                                    dispatch(cashOrderByPaypal({ COD: false, payment_id: data.orderID, address: currentAddress }))
                                  }}
                                  onError={() => {
                                     alert("Transaction error");

@@ -24,6 +24,7 @@ export const ShopTest = () => {
    const [products, setProducts] = useState(data || []);
    const { selectedBrand, setSelectedBrand, selectedCategories, setSelectedCategories } = useFilter(data || []);
    useEffect(() => {
+      window.scrollTo(0, 0);
       dispatch(getAllBrand());
       dispatch(getAllCategoryProduct());
       dispatch(getAllProducts());
@@ -78,12 +79,12 @@ export const ShopTest = () => {
       dispatch(changePage(currentPage - 1));
    }
    const cratePagination = () => {
-      const arr: number[] = new Array(Math.ceil(totalFilteredPages / limitPerPage))
+      const arr: number[] = new Array(Math.ceil(totalFilteredPages))
          .fill(1)
          .map((_, idx) => idx + 1);
 
       setPagination(arr);
-      setPages(Math.ceil(totalFilteredPages / limitPerPage));
+      setPages(Math.ceil(totalFilteredPages));
    };
    const clearFilter = () => {
       setPrice({ value: { min: 0, max: 500 } });
@@ -125,7 +126,7 @@ export const ShopTest = () => {
                                     <div className="sort-by-product-area px-2 py-2" style={{ border: "1px solid #ccc", borderRadius: "8px" }}>
                                        <div className="sort-by-cover">
                                           <select className="sort-by-product-wrap " onChange={handleBrandChange} >
-                                             <option value="" defaultValue={""} defaultChecked>Select brands</option>
+                                             <option value="" defaultValue={""} defaultChecked>All brands</option>
                                              {brands.map((item) => (
                                                 <option key={item._id} value={`${item.title}`}>{item.title}</option>
                                              ))}
@@ -175,7 +176,7 @@ export const ShopTest = () => {
                         <div className="sort-by-product-area ">
                            <div className="sort-by-cover">
                               <select className="sort-by-product-wrap " value={sort} onChange={handleSort}>
-                                 <option value=""><span>Sort by: Featured</span></option>
+                                 <option value=""><span>Sort by: Created</span></option>
                                  <option value="price">Price: Low to High </option>
                                  <option value="-price">Price: High to low</option>
                                  <option value={"title"}>Name (a-&gt;z)</option>
@@ -185,7 +186,7 @@ export const ShopTest = () => {
                         </div>
                      </div>
                      <div className="row product-grid">
-                        {products.slice(currentPage - 1, currentPage + limitPerPage - 1).map((item) => (
+                        {products.slice((currentPage - 1) * limitPerPage, currentPage * limitPerPage ).map((item) => (
                            <ProductItem key={item._id} product={item} />
                         ))}
                      </div>

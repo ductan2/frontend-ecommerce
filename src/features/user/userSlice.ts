@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AsyncState, ErrorResponseAxios } from "../../types/Reponse";
 import userService from "./userService";
-import { CartItem, CartPayload, User, UserLogin, UserRegister } from "../../types/user";
+import { Address, CartItem, CartPayload, User, UserLogin, UserRegister, UserUpdate } from "../../types/user";
 import { toast } from "react-toastify";
 import { Product } from "../../types/product";
 import { AxiosResponse } from "axios";
@@ -36,6 +36,15 @@ export const registerUser = createAsyncThunk<UserRegister, UserRegister>("user/r
 export const loginUser = createAsyncThunk<{ refresh_token: string, token: string }, UserLogin>("user/login", async (body, thunkAPI) => {
    try {
       const response = await userService.loginUser(body);
+      return response.data.result;
+   } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+   }
+})
+export const updateUser = createAsyncThunk<User, UserUpdate>("user/update", async (body, thunkAPI) => {
+   console.log("🚀 ~ file: userSlice.ts:45 ~ updateUser ~ body:", body)
+   try {
+      const response = await userService.updateUser(body);
       return response.data.result;
    } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -92,9 +101,9 @@ export const updateCartQuantity = createAsyncThunk<string, { id: string, amount:
       return thunkAPI.rejectWithValue(error);
    }
 })
-export const cashOrderByPaypal = createAsyncThunk<string, { COD?: boolean, couponApplied?: string, payment_id?: string }>("users/order/cash-order", async ({ COD, couponApplied, payment_id }, thunkAPI) => {
+export const cashOrderByPaypal = createAsyncThunk<string, { COD?: boolean, couponApplied?: string, payment_id?: string, address: Address }>("users/order/cash-order", async ({ COD, couponApplied, payment_id, address }, thunkAPI) => {
    try {
-      const response = await userService.cashOrderByPaypal({ COD, couponApplied, payment_id });
+      const response = await userService.cashOrderByPaypal({ COD, couponApplied, payment_id, address });
       return response.data.result;
    } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -134,6 +143,9 @@ export const userSlice = createSlice({
                toast.success("Register successfully !", {
                   position: toast.POSITION.TOP_RIGHT
                });
+               setTimeout(() => {
+                  window.location.href = "/login"
+               }, 1000)
             }
          })
          .addCase(registerUser.rejected, (state, action) => {
@@ -153,11 +165,14 @@ export const userSlice = createSlice({
             state.isSuccess = true;
             console.log(action.payload)
             localStorage.setItem("token", action.payload.token)
+            const { search } = new URL(window.location.href);
             if (state.isSuccess === true) {
                toast.success("Login successfully !", {
                   position: toast.POSITION.TOP_RIGHT
                });
-               window.location.href = "/"
+               setTimeout(() => {
+                  window.location.href = search.substring(1)
+               }, 1000)
             }
 
          })

@@ -9,7 +9,8 @@ const initialState: AsyncState<Blog> = {
    isError: false,
    isLoading: false,
    isSuccess: false,
-   message: ""  
+   message: "",
+   dataUpdate: undefined
 }
 
 
@@ -21,7 +22,30 @@ export const getAllBlog = createAsyncThunk("blogs/get-all", async () => {
       return error
    }
 });
-
+export const getBlogById = createAsyncThunk("blogs/get-a-blog", async (id: string) => {
+   try {
+      const response = await blogService.getBlogById(id);
+      return response.data.result;
+   } catch (error) {
+      return error
+   }
+});
+export const likeBlog = createAsyncThunk("blogs/likes", async (id: string) => {
+   try {
+      const response = await blogService.likeBlog(id);
+      return response.data.result;
+   } catch (error) {
+      return error
+   }
+});
+export const dislikeBlog = createAsyncThunk("blogs/dislike", async (id: string) => {
+   try {
+      const response = await blogService.dislikeBlog(id);
+      return response.data.result;
+   } catch (error) {
+      return error
+   }
+});
 export const blogSlice = createSlice({
    name: 'blogs',
    initialState: initialState,
@@ -41,6 +65,20 @@ export const blogSlice = createSlice({
             state.isError = true
             state.isSuccess = false;
             state.message = action.error as string;
+         })
+         .addCase(getBlogById.pending, (state) => {
+            state.isLoading = true;
+         })
+         .addCase(getBlogById.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.isError = false
+            state.isSuccess = true;
+            state.dataUpdate = action.payload;
+         })
+         .addCase(getBlogById.rejected, (state) => {
+            state.isLoading = false;
+            state.isError = true
+            state.isSuccess = false;
          })
    },
 })

@@ -423,6 +423,17 @@ input[type=number]:focus,
 .text-red-hover:hover {
   color: red !important; }
 
+.line {
+  width: 100%;
+  display: block;
+  margin: 15px 0;
+  height: 1px;
+  background-color: #ececec;
+  content: ""; }
+
+.icon-hover:hover {
+  opacity: 0.6; }
+
 a,
 button,
 img,
@@ -3093,7 +3104,10 @@ table {
         background-color: #f59758; }
   .product-cart-wrap .product-content-wrap {
     padding: 0 20px 20px 20px;
-    min-height: 210px; }
+    min-height: 210px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; }
     .product-cart-wrap .product-content-wrap .product-category {
       margin-bottom: 5px; }
       .product-cart-wrap .product-content-wrap .product-category a {
@@ -3161,15 +3175,19 @@ table {
     margin-top: 15px; }
     .product-cart-wrap .product-card-bottom .add-cart {
       cursor: pointer; }
-      .product-cart-wrap .product-card-bottom .add-cart .add {
+      .product-cart-wrap .product-card-bottom .add-cart .views {
         position: relative;
-        display: inline-block;
         padding: 6px 20px 6px 20px;
         border-radius: 4px;
         background-color: #DEF9EC;
         font-size: 14px;
-        font-weight: 700; }
-        .product-cart-wrap .product-card-bottom .add-cart .add:hover {
+        font-weight: 700;
+        margin-left: 5px;
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+        gap: 5px; }
+        .product-cart-wrap .product-card-bottom .add-cart .views:hover {
           background-color: #3BB77E;
           color: #fff;
           transform: translateY(-3px);
@@ -4475,10 +4493,12 @@ h6.post-title {
     position: relative;
     background: #fff;
     overflow: hidden; }
-  .loop-grid .entry-content {
-    padding: 30px; }
   .loop-grid .entry-content-2 {
-    padding: 20px 30px; }
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 175px; }
   .loop-grid.loop-list {
     position: relative; }
     .loop-grid.loop-list article {

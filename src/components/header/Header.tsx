@@ -6,7 +6,6 @@ import { getInfoUser } from "../../features/user/userSlice";
 import { useSelector } from "react-redux";
 
 
-
 interface Props {
    toggleClick: () => void;
    totalCartItems: number;
@@ -126,28 +125,28 @@ export const Header = ({ toggleClick, totalCartItems, totalWishlistItems }: Prop
                                     <div className="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
                                        <ul>
                                           <li>
-                                             <Link to="/page-account">
+                                             <Link to="/account">
                                                 <div>
                                                    <i className="fi fi-rs-user mr-10"></i>
                                                    My Account
-                                                </div></Link>
+                                                </div>
+                                             </Link>
                                           </li>
                                           <li>
-                                             <Link to="/page-account"><div>
+                                             <Link to="/account/order"><div>
                                                 <i className="fi fi-rs-location-alt mr-10"></i>
                                                 Order Tracking
                                              </div>
                                              </Link>
                                           </li>
-
                                           <li>
-                                             <Link to="/page-account"><div>
-                                                <i className="fi fi-rs-settings-sliders mr-10"></i>
-                                                Setting
+                                             <Link to="/logout"><div>
+                                                <i className="fi fi-rs-marker mr-10"></i>
+                                                My address
                                              </div></Link>
                                           </li>
                                           <li>
-                                             <Link to="/page-login"><div>
+                                             <Link to="/logout"><div>
                                                 <i className="fi fi-rs-sign-out mr-10"></i>
                                                 Sign out
                                              </div></Link>

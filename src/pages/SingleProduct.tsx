@@ -53,7 +53,7 @@ export const SingleProduct = () => {
          });
          return;
       }
-      dispatch(addToCart({ _id: dataItem._id, count:quantity, color: idColor }))
+      dispatch(addToCart({_id: dataItem._id, count: quantity, color: idColor}))
 
    }
    return (

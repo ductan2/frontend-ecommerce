@@ -22,9 +22,9 @@ const initialState: AsyncStateWithPage<Product> = {
    message: "",
    dataItem: {} as Product,
    currentPage: 1,
-   limitPerPage: 1,
+   limitPerPage: 10,
    totalFilteredPages: 1,
-   showPagination: 3,
+   showPagination: 4,
 }
 
 export const getAllProducts = createAsyncThunk<Product>("products/get-all", async (_, thunkAPI) => {
@@ -103,9 +103,9 @@ export const productSlice = createSlice({
                state.filterData.sort((a, b) => b.created_at.localeCompare(a.created_at));
                break;
          }
-    
       },
       changePage: (state, action) => {
+         window.scrollTo(0, 0)
          state.currentPage = action.payload;
       },
       clear: (state) => {

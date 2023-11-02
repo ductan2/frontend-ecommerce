@@ -12,6 +12,19 @@ export type UserLogin = {
    email: string,
    password: string,
 }
+export type Address = {
+   id?: string
+   province?: string
+   district?: string
+   wards?: string
+}
+export interface UserUpdate {
+   firstname?: string;
+   lastname?: string;
+   mobile?: string;
+   address?: Address;
+   avatar?: string;
+}
 export interface User {
    _id: string;
    firstname?: string;
@@ -19,7 +32,7 @@ export interface User {
    email: string;
    mobile?: string;
    role?: string;
-   address?: string;
+   address?: Address[];
    avatar?: string;
    blocked?: boolean;
    created_at?: Date; // Có thể chuyển thành kiểu Date 
@@ -33,7 +46,7 @@ export type CartPayload = {
 }
 export interface CartItem {
    _id: string;
-   product: Product  ;
+   product: Product;
    cartTotal: number;
    amount: number;
    color?: string;

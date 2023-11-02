@@ -22,13 +22,13 @@ export const ProductItem = ({ product }: props) => {
             <div className="product-img-action-wrap">
                <div className="product-img product-img-zoom">
                   <Link to={`/shop/product/${product._id}`}>
-                     <img className="default-img" src={product.images[0].url} alt="" />
-                     {product.images[1].url ? <img className="hover-img" src={product.images[1].url} alt="" /> : null}
+                     <img className="default-img" src={product.images[0].url} alt={product.title} />
+                     {product.images[1] && product.images[1].url ?
+                        <img className="hover-img" src={product.images[1].url} alt={product.title + "2"} /> : null}
                   </Link>
                </div>
                <div className="product-action-1 d-flex">
                   <a onClick={() => addToWish(product._id)} aria-label="Add To Wishlist" className="action-btn"><i className="fi-rs-heart"></i></a>
-                  <Link to={`/shop/product/${product._id}`} aria-label="Quick view" className="action-btn" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i className="fi-rs-eye"></i></Link>
                </div>
                <div className="product-badges product-badges-position product-badges-mrg">
                   {product.trending ? <span className="hot">Trending</span> : (
@@ -48,14 +48,14 @@ export const ProductItem = ({ product }: props) => {
                   <span className="font-small ml-5 text-muted"> {product.rating_distribution}</span>
                </div>
                <div>
-                  <span className="font-small text-muted">By <a href="vendor-details-1.html">{product.brand}</a></span>
+                  <span className="font-small text-muted">By <a href="#">{product.brand}</a></span>
                </div>
                <div className="product-card-bottom">
                   <div className="product-price">
                      <span>${product.price}</span>
                   </div>
                   <div className="add-cart">
-                     <a className="add" href="shop-cart.html"><i className="fi-rs-shopping-cart mr-5"></i>Add </a>
+                     <Link className="views" to={`/shop/product/${product._id}`}><i className="fi-rs-eye"></i>Views </Link>
                   </div>
                </div>
             </div>

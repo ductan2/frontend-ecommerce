@@ -33,7 +33,6 @@ export const Register = () => {
       onSubmit: (values) => {
          setTimeout(() => {
             dispatch(registerUser(values))
-            formik.resetForm()
          }, 500)
       }
    })

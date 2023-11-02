@@ -16,7 +16,7 @@ export const PopularProduct = () => {
    const { data } = useSelector((state: RootState) => state.products)
 
    useEffect(() => {
-      dispatch(getAllProducts({}))
+      dispatch(getAllProducts())
    }, [dispatch])
    useEffect(() => {
       if (data) {
@@ -30,7 +30,7 @@ export const PopularProduct = () => {
          <div className="container">
             <h1 className='mb-30'>Trendings products</h1>
             <div className="row">
-               {procTrending.map((item: Product) => (
+               {procTrending.slice(0, 9).map((item: Product) => (
                   <ProductItem key={item._id} product={item} />
                ))}
             </div>

@@ -264,3 +264,15 @@ input[type=number]:focus,
 		color: red !important;
 	}
 }
+.line{
+	width: 100%;
+	display: block;
+	margin: 15px 0;	
+	height: 1px;
+	background-color: #ececec;
+	content: "";
+}
+
+.icon-hover:hover{
+	opacity: 0.6;
+}

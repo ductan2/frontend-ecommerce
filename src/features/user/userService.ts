@@ -1,5 +1,5 @@
 
-import { CartPayload, UserLogin, UserRegister } from "../../types/user";
+import { Address, CartPayload, UserLogin, UserRegister, UserUpdate } from "../../types/user";
 import { auth } from "../../utils/auth";
 import http from "../../utils/http";
 
@@ -31,16 +31,19 @@ const emptyCart = async () => {
 const updateCartQuantity = async (id: string, amount: number) => {
    return http.put(`/users/cart/update-cart/${id}`, { amount }, auth)
 }
-const cashOrderByPaypal = async (body:{COD?:boolean, couponApplied?:string,payment_id?:string}) => {
+const cashOrderByPaypal = async (body: { COD?: boolean, couponApplied?: string, payment_id?: string, address: Address }) => {
    return http.post(`/users/order/cash-order`, body, auth)
 }
 
 const appliedCoupon = async (coupon: string) => {
    return http.patch(`/users/apply-coupon`, { coupon }, auth)
 }
-
+const updateUser = async (data: UserUpdate) => {
+   console.log("🚀 ~ file: userService.ts:42 ~ updateUser ~ data:", data)
+   return http.patch(`/users/update-user`, data, auth)
+}
 const userService = {
-   registerUser, loginUser, getWishList, addToCart, getCart, deleteCartItem,emptyCart,
-   updateCartQuantity,cashOrderByPaypal,appliedCoupon,getInfoUser
+   registerUser, loginUser, getWishList, addToCart, getCart, deleteCartItem, emptyCart,
+   updateCartQuantity, cashOrderByPaypal, appliedCoupon, getInfoUser, updateUser
 }
 export default userService;

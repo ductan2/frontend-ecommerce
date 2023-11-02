@@ -31,7 +31,7 @@ export const Login = () => {
 
    useEffect(() => {
       if (errorResponse) {
-         
+
          errorResponse.forEach((error) => {
             formik.setFieldError(error.path as string, error.error)
          })
@@ -40,6 +40,7 @@ export const Login = () => {
    }, [errorResponse])
 
    if (user && user._id) {
+      console.log("navigate")
       return <Navigate to="/" />
    }
 
