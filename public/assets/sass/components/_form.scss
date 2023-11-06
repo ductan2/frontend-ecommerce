@@ -387,7 +387,8 @@ label {
 	.thumb {
 		margin-right: 20px;
 		img {
-			width: 70px;
+			min-width: 50px !important;
+			height: 50px !important;
 			border-radius: 50%;
 		}
 	}

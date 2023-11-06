@@ -52,7 +52,6 @@ export const Comment = ({ post, product_id }: Props) => {
    }, 500)
    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
-      console.log("🚀 ~ file: Comment.tsx:56 ~ handleSubmit ~ user:", user)
       if (!user._id) {
          toast.error("You can login to comment this post!", {
             position: toast.POSITION.TOP_RIGHT
@@ -65,7 +64,7 @@ export const Comment = ({ post, product_id }: Props) => {
          setIsLoad(false)
       }, 1000);
    }
-
+   console.log(post);
    if (!post) return null
    return (
       <>
@@ -79,11 +78,14 @@ export const Comment = ({ post, product_id }: Props) => {
                         {post?.map((item, index) => {
                            return <div className="single-comment mb-30 " key={index}>
                               <div className="user row">
-                                 <div className="thumb col-2">
-                                    <img src={item.postedBy.avatar} alt="" />
+                                 <div className="thumb col-3">
+                                    <img src={typeof item.postedBy.avatar !== "string" ?
+                                       item.postedBy.avatar?.url :
+                                       item.postedBy.avatar}
+                                       alt="" />
                                     <div className="font-heading text-brand no-wrap">{item.postedBy.firstname + " " + item.postedBy.lastname}</div>
                                  </div>
-                                 <div className="desc col-9">
+                                 <div className="desc col-8">
                                     <div className="d-flex justify-content-between mb-10">
                                        <div className="d-flex align-items-center">
                                           <span className="font-xs text-muted">{moment(item.posted_at).format('MMMM D, YYYY [at] h:mm a')}</span>

@@ -72,12 +72,13 @@
            border-radius: 10px;
            border: 1px solid $border-color;
            border-radius: 10px;
-            a {
+            a,div {
                 font-size: $font-md;
                 color: $color-text;
                 padding: 15px 30px;
                 font-family: $font-heading;
                 font-weight: 700;
+                cursor: pointer;
                 i {
                     color: $color-text;
                     font-size: $font-xl;

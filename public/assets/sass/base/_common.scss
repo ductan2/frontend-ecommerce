@@ -276,3 +276,23 @@ input[type=number]:focus,
 .icon-hover:hover{
 	opacity: 0.6;
 }
+.list-item-header div.active{
+	color: #3BB77E !important;
+}
+.hover-text-danger{
+	transition: .5s all;
+	cursor: pointer;
+	&:hover{
+	color:  rgb(0, 217, 255) !important;
+	}
+}
+.text-success {
+	color: #3BB77E !important;
+}
+.hover-text-success{
+	transition: .5s all;
+	cursor: pointer;
+	&:hover{
+		color: rgb(232, 222, 34) !important;
+	}
+}

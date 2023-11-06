@@ -36,13 +36,13 @@ export const registerUser = createAsyncThunk<UserRegister, UserRegister>("user/r
 export const loginUser = createAsyncThunk<{ refresh_token: string, token: string }, UserLogin>("user/login", async (body, thunkAPI) => {
    try {
       const response = await userService.loginUser(body);
+      console.log("🚀 ~ file: userSlice.ts:39 ~ loginUser ~ response:", response)
       return response.data.result;
    } catch (error) {
       return thunkAPI.rejectWithValue(error);
    }
 })
 export const updateUser = createAsyncThunk<User, UserUpdate>("user/update", async (body, thunkAPI) => {
-   console.log("🚀 ~ file: userSlice.ts:45 ~ updateUser ~ body:", body)
    try {
       const response = await userService.updateUser(body);
       return response.data.result;
@@ -127,10 +127,36 @@ export const getInfoUser = createAsyncThunk("users/info", async (_, thunkAPI) =>
       return thunkAPI.rejectWithValue(error);
    }
 })
+export const logout = createAsyncThunk("users/logout", async (_, thunkAPI) => {
+   try {
+      const response = await userService.logout();
+      return response.data;
+   } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+   }
+})
+export const forgotPassword = createAsyncThunk<string, string>("users/forgot-password", async (email, thunkAPI) => {
+   try {
+      const response = await userService.forgotPassword(email);
+      return response.data;
+   } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+   }
+})
+export const resetPassword = createAsyncThunk<string, { password: string, confirmPassword: string, token: string }>("users/reset-password", async ({ password, confirmPassword, token }, thunkAPI) => {
+   try {
+      const response = await userService.resetPassword(password, confirmPassword, token);
+      return response.data;
+   } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+   }
+})
 export const userSlice = createSlice({
    name: 'users',
    initialState: initialState,
-   reducers: {},
+   reducers: {
+
+   },
    extraReducers(builder) {
       builder.addCase(registerUser.pending, (state) => {
          state.isLoading = true;
@@ -163,7 +189,6 @@ export const userSlice = createSlice({
             state.isLoading = false;
             state.isError = false
             state.isSuccess = true;
-            console.log(action.payload)
             localStorage.setItem("token", action.payload.token)
             const { search } = new URL(window.location.href);
             if (state.isSuccess === true) {
@@ -180,6 +205,7 @@ export const userSlice = createSlice({
             state.isLoading = false;
             state.isError = true
             state.isSuccess = false;
+            console.log(action)
             if (action.payload) {
                state.errorResponse = (action.payload as ErrorResponseAxios).response?.data || []
             }
@@ -297,6 +323,90 @@ export const userSlice = createSlice({
             state.isError = true
             state.isSuccess = false;
 
+         })
+         .addCase(logout.pending, (state) => {
+            state.isLoading = true;
+         })
+         .addCase(logout.fulfilled, (state) => {
+            state.isLoading = false;
+            state.isError = false
+            state.isSuccess = true;
+            if (state.isSuccess) {
+               localStorage.removeItem("token")
+               window.location.href = "/"
+            }
+         })
+         .addCase(logout.rejected, (state) => {
+            state.isLoading = false;
+            state.isError = true
+            state.isSuccess = false;
+         })
+         .addCase(forgotPassword.pending, (state) => {
+            state.isLoading = true;
+         })
+         .addCase(forgotPassword.fulfilled, (state) => {
+            state.isLoading = false;
+            state.isError = false
+            state.isSuccess = true;
+            if (state.isSuccess) {
+               toast.success("Send email successfully !", {
+                  position: toast.POSITION.TOP_RIGHT
+               });
+               setTimeout(() => {
+                  window.location.href = "/check-email"
+               }, 1000)
+            }
+         })
+         .addCase(forgotPassword.rejected, (state) => {
+            state.isLoading = false;
+            state.isError = true
+            state.isSuccess = false;
+         })
+         .addCase(resetPassword.pending, (state) => {
+            state.isLoading = true;
+         })
+         .addCase(resetPassword.fulfilled, (state) => {
+            state.isLoading = false;
+            state.isError = false
+            state.isSuccess = true;
+            if (state.isSuccess) {
+               toast.success("Password changed successfully !", {
+                  position: toast.POSITION.TOP_RIGHT
+               });
+               setTimeout(() => {
+                  window.location.href = "/login"
+               }, 1000)
+            }
+         })
+         .addCase(resetPassword.rejected, (state, action) => {
+            state.isLoading = false;
+            state.isError = true
+            state.isSuccess = false;
+            if (action.payload) {
+               state.errorResponse = (action.payload as ErrorResponseAxios).response?.data || []
+            }
+         })
+         .addCase(updateUser.pending, (state) => {
+            state.isLoading = true;
+         })
+         .addCase(updateUser.fulfilled, (state) => {
+            state.isLoading = false;
+            state.isError = false
+            state.isSuccess = true;
+            if (state.isSuccess) {
+               toast.success("Update user successfully !", {
+                  position: toast.POSITION.TOP_RIGHT
+               });
+
+            }
+         })
+         .addCase(updateUser.rejected, (state, action) => {
+            state.isLoading = false;
+            state.isError = true
+            state.isSuccess = false;
+            if (action.payload) {
+               state.errorResponse = (action.payload as ErrorResponseAxios).response?.data || []
+            }
          })
    },
 })

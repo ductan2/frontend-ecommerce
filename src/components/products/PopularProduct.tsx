@@ -13,7 +13,7 @@ export const PopularProduct = () => {
 
    const dispatch = useAppDispatch()
    const [procTrending, setProcTrending] = useState<Product[]>([])
-   const { data } = useSelector((state: RootState) => state.products)
+   const { data,isLoading } = useSelector((state: RootState) => state.products)
 
    useEffect(() => {
       dispatch(getAllProducts())
@@ -24,7 +24,7 @@ export const PopularProduct = () => {
          setProcTrending(proc)
       }
    }, [data])
-   if (!procTrending) return <Loading isFull />
+   if (isLoading) return <Loading isFull />
    return (
       <section className="product-tabs section-padding position-relative">
          <div className="container">

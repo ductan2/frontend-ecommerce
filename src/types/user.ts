@@ -1,3 +1,4 @@
+import { UploadImageType } from "./commom";
 import { Product } from "./product";
 
 export type UserRegister = {
@@ -23,7 +24,7 @@ export interface UserUpdate {
    lastname?: string;
    mobile?: string;
    address?: Address;
-   avatar?: string;
+   avatar?: UploadImageType | string;
 }
 export interface User {
    _id: string;
@@ -33,7 +34,7 @@ export interface User {
    mobile?: string;
    role?: string;
    address?: Address[];
-   avatar?: string;
+   avatar?: UploadImageType | string;
    blocked?: boolean;
    created_at?: Date; // Có thể chuyển thành kiểu Date 
    updated_at?: Date; // Có thể chuyển thành kiểu Date 

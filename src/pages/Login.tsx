@@ -82,7 +82,7 @@ export const Login = () => {
                                                 <label className="form-check-label" htmlFor="exampleCheckbox1"><span>Remember me</span></label>
                                              </div>
                                           </div>
-                                          <a className="text-muted" href="#">Forgot password?</a>
+                                          <Link className="text-muted" to="/forgot-password">Forgot password?</Link>
                                        </div>
                                        <div className="form-group">
                                           <button type="submit" className="btn btn-heading btn-block hover-up w-full" name="login">

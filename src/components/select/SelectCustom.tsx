@@ -2,7 +2,7 @@ import { Province } from "../../types/commom"
 
 type SelectCustomProps = {
    data: Province[]
-   value: string
+   value: string | undefined
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
    onChange: (e: any) => void
    defaultName: string

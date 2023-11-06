@@ -42,8 +42,19 @@ const updateUser = async (data: UserUpdate) => {
    console.log("🚀 ~ file: userService.ts:42 ~ updateUser ~ data:", data)
    return http.patch(`/users/update-user`, data, auth)
 }
+const logout = async () => {
+   return http.get(`/users/logout`, auth)
+}
+const forgotPassword = async (email: string) => {
+   return http.post(`/users/forgot-password-token`, { email })
+}
+const resetPassword = async (password: string,confirmPassword:string, token: string) => {
+   return http.put(`/users/reset-password/${token}`, { password,confirmPassword })
+}
+
 const userService = {
    registerUser, loginUser, getWishList, addToCart, getCart, deleteCartItem, emptyCart,
-   updateCartQuantity, cashOrderByPaypal, appliedCoupon, getInfoUser, updateUser
+   updateCartQuantity, cashOrderByPaypal, appliedCoupon, getInfoUser, updateUser, logout,
+   forgotPassword,resetPassword
 }
 export default userService;

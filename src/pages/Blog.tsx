@@ -9,12 +9,12 @@ import { Link } from "react-router-dom"
 import { Loading } from "../components/loading/Loading"
 dayjs.extend(relativeTime)
 export const Blog = () => {
-   const { data } = useSelector((state: RootState) => state.blogs)
+   const { data, isLoading } = useSelector((state: RootState) => state.blogs)
    const dispatch = useAppDispatch()
    useEffect(() => {
       dispatch(getAllBlog())
    }, [dispatch])
-   if (!data) return <Loading isFull />
+   if (isLoading) return <Loading isFull />
    return (
       <main className="main mt-50">
 
@@ -38,7 +38,7 @@ export const Blog = () => {
                                     <Link to={`/blog/${item._id}`}>
                                        <img className="border-radius-15" src={(item.images as UploadImageType).url || item.images as string} alt="" />
                                     </Link>
-                                    
+
                                  </div>
                                  <div className="entry-content-2">
                                     <h6 className="mb-10 font-sm"><a className="entry-meta text-muted" href="blog-category-grid.html">{

@@ -6,14 +6,18 @@ import paymentReducer from "../features/payment/paymentSlice"
 import brandReducer from "../features/brand/brandSlice"
 import categoryProcReducer from "../features/categoryProduct/categoryProcSlice"
 import blogReducer from "../features/blog/blogSlice"
+import uploadReducer from "../features/uploads/uploadSlice"
+import orderReducer from "../features/orders/orderSlice"
 export const store = configureStore({
    reducer: {
       user: userReducer,
-      products:productReducer,
-      payment:paymentReducer,
-      brands:brandReducer,
-      categoryProc:categoryProcReducer,
-      blogs:blogReducer
+      products: productReducer,
+      payment: paymentReducer,
+      brands: brandReducer,
+      categoryProc: categoryProcReducer,
+      blogs: blogReducer,
+      upload: uploadReducer,
+      order: orderReducer,
    },
 })
 export type RootState = ReturnType<typeof store.getState>

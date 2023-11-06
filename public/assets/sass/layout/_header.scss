@@ -633,6 +633,13 @@
 				color: $color-brand;
 			}
 		}
+		div{
+			color: $color-heading;
+			cursor: pointer;
+			&:hover {
+				color: $color-brand;
+			}
+		}
 	}
 
 	ul {

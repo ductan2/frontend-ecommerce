@@ -17,6 +17,10 @@ import Contact from "./pages/Contact"
 import UpdateProfile from "./pages/profile/UpdateProfile"
 import OrderList from "./pages/profile/OrderList"
 import AccountAddress from "./pages/profile/AccountAddress"
+import ErrorPage from "./pages/ErrorPage"
+import ForgotPassword from "./pages/ForgotPassword"
+import ResetPassword from "./pages/ResetPassword"
+import CheckEmail from "./pages/CheckEmail"
 
 function App() {
 
@@ -35,6 +39,10 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="contact" element={<Contact />} />
+            <Route path="blog" element={<Blog />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="check-email" element={<CheckEmail />} />
+            <Route path="reset-password/:token" element={<ResetPassword />} />
             <Route path="account" element={
               <PrivateRoutes>
                 <MyAccount />
@@ -47,7 +55,7 @@ function App() {
               element={<PrivateRoutes>
                 <Cart />
               </PrivateRoutes>} />
-            <Route path="blog" element={<Blog />} />
+            <Route path="*" element={<ErrorPage />} />
           </Route>
 
 

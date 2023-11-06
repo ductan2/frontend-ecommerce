@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom"
 import { useState, useEffect } from "react"
 import Search from "../search/Search";
 import { RootState, useAppDispatch } from "../../store/store";
-import { getInfoUser } from "../../features/user/userSlice";
+import { getInfoUser, logout } from "../../features/user/userSlice";
 import { useSelector } from "react-redux";
 
 
@@ -112,47 +112,50 @@ export const Header = ({ toggleClick, totalCartItems, totalWishlistItems }: Prop
                                           alt="Nest"
                                           src="/assets/imgs/theme/icons/icon-user.svg"
                                        />
-                                    </div></Link>
-                                    <Link to="/page-account"><div>
-                                       <span className="lable ml-0">
-                                          {user && user._id ? user.lastname + " " + user.firstname : (
-                                             <Link to={"/login"}>
-                                                <span className="lable ml-0">Login</span>
-                                             </Link>
-                                          )}
-                                       </span>
-                                    </div></Link>
-                                    <div className="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
-                                       <ul>
-                                          <li>
-                                             <Link to="/account">
-                                                <div>
-                                                   <i className="fi fi-rs-user mr-10"></i>
-                                                   My Account
-                                                </div>
-                                             </Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/account/order"><div>
-                                                <i className="fi fi-rs-location-alt mr-10"></i>
-                                                Order Tracking
-                                             </div>
-                                             </Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/logout"><div>
-                                                <i className="fi fi-rs-marker mr-10"></i>
-                                                My address
-                                             </div></Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/logout"><div>
-                                                <i className="fi fi-rs-sign-out mr-10"></i>
-                                                Sign out
-                                             </div></Link>
-                                          </li>
-                                       </ul>
                                     </div>
+                                    </Link>
+                                    <Link to="/login">
+                                       <div>
+                                          <span className="lable ml-0">
+                                             {user && user._id ? user.lastname + " " + user.firstname : (
+                                                <span className="lable ml-0">Login</span>
+                                             )}
+                                          </span>
+                                       </div>
+                                    </Link>
+                                    {user && user._id && <>
+                                       <div className="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
+                                          <ul>
+                                             <li>
+                                                <Link to="/account">
+                                                   <div>
+                                                      <i className="fi fi-rs-user mr-10"></i>
+                                                      My Account
+                                                   </div>
+                                                </Link>
+                                             </li>
+                                             <li>
+                                                <Link to="/account/orders"><div>
+                                                   <i className="fi fi-rs-location-alt mr-10"></i>
+                                                   Order Tracking
+                                                </div>
+                                                </Link>
+                                             </li>
+                                             <li>
+                                                <Link to="/account/address"><div>
+                                                   <i className="fi fi-rs-marker mr-10"></i>
+                                                   My address
+                                                </div></Link>
+                                             </li>
+                                             <li>
+                                                <div onClick={() => dispatch(logout())}>
+                                                   <i className="fi fi-rs-sign-out mr-10"></i>
+                                                   Sign out
+                                                </div>
+                                             </li>
+                                          </ul>
+                                       </div>
+                                    </>}
                                  </div>
                               </div>
                            </div>
@@ -203,63 +206,18 @@ export const Header = ({ toggleClick, totalCartItems, totalWishlistItems }: Prop
                                     style={{ display: "block" }}
                                  >
                                     <div className="d-flex categori-dropdown-inner">
-                                       <ul>
-                                          <li>
-                                             <Link to="/products"><div>
-                                                {" "}
-                                                <img
-                                                   src="/assets/imgs/theme/icons/icon-1.svg"
-                                                   alt=""
-                                                />
-                                                Milks and Dairies
-                                             </div></Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/products"><div>
-                                                {" "}
-                                                <img
-                                                   src="/assets/imgs/theme/icons/icon-2.svg"
-                                                   alt=""
-                                                />
-                                                Clothing & beauty
-                                             </div></Link>
-                                          </li>
-                                       </ul>
-                                       <ul className="end">
-                                          <li>
-                                             <Link to="/products"><div>
-                                                {" "}
-                                                <img
-                                                   src="/assets/imgs/theme/icons/icon-3.svg"
-                                                   alt=""
-                                                />
-                                                Wines & Drinks
-                                             </div></Link>
-                                          </li>
-                                          <li>
-                                             <Link to="/products"><div>
-                                                {" "}
-                                                <img
-                                                   src="/assets/imgs/theme/icons/icon-4.svg"
-                                                   alt=""
-                                                />
-                                                Fresh Seafood
-                                             </div></Link>
-                                          </li>
-                                       </ul>
                                     </div>
                                  </div>
                                  <div className="more_categories">
-                                    <span className="icon"></span>{" "}
                                     <span className="heading-sm-1">
-                                       Show more...
+                                       Feature is not yet fully implemented...
                                     </span>
                                  </div>
                               </div>
                            </div>
                            <div className="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block  font-heading">
                               <nav>
-                                 <ul>
+                                 <ul className="list-item-header">
                                     <li className="hot-deals">
                                        <img
                                           src="/assets/imgs/theme/icons/icon-hot.svg"
@@ -270,7 +228,7 @@ export const Header = ({ toggleClick, totalCartItems, totalWishlistItems }: Prop
                                        </div>
                                        </Link>
                                     </li>
-                                    <li>
+                                    <li className="nav-item">
 
                                        <Link to="/">
                                           {checkActiveUrl("/") ?
@@ -279,7 +237,7 @@ export const Header = ({ toggleClick, totalCartItems, totalWishlistItems }: Prop
                                           }
                                        </Link>
                                     </li>
-                                    <li>
+                                    <li className="nav-item">
                                        <Link to="/about">
                                           {checkActiveUrl("/about") ?
                                              <div className="active">About</div> :
@@ -287,7 +245,7 @@ export const Header = ({ toggleClick, totalCartItems, totalWishlistItems }: Prop
                                           }
                                        </Link>
                                     </li>
-                                    <li>
+                                    <li className="nav-item">
                                        <Link to="/shop">
                                           {checkActiveUrl("/shop") ?
                                              <div className="active">Shop</div> :
@@ -295,7 +253,7 @@ export const Header = ({ toggleClick, totalCartItems, totalWishlistItems }: Prop
                                           }
                                        </Link>
                                     </li>
-                                    <li>
+                                    <li className="nav-item">
                                        <Link to="/blog">
                                           {checkActiveUrl("/blog") ?
                                              <div className="active">Blog</div> :
@@ -304,8 +262,8 @@ export const Header = ({ toggleClick, totalCartItems, totalWishlistItems }: Prop
                                        </Link>
                                     </li>
 
-                                    <li>
-                                       <Link to="/">
+                                    <li className="nav-item">
+                                       <Link to="/contact">
                                           {checkActiveUrl("/contact") ?
                                              <div className="active">Contact</div> :
                                              <div>Contact</div>

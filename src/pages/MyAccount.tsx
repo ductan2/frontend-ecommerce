@@ -1,9 +1,11 @@
 import { Link, Outlet, useLocation } from "react-router-dom"
+import { logout } from "../features/user/userSlice";
+import { useAppDispatch } from "../store/store";
 
 const MyAccount = () => {
    const slug = useLocation().pathname;
    const match = slug.match(/\/account\/(.*)/) || "/"
-
+   const dispatch = useAppDispatch();
    return (
       <main className="main pages">
          <div className="page-content pt-150  pb-150">
@@ -37,7 +39,7 @@ const MyAccount = () => {
                                  </li>
 
                                  <li className="nav-item">
-                                    <a className="nav-link" href="page-login.html"><i className="fi-rs-sign-out mr-10"></i>Logout</a>
+                                    <div className="nav-link" onClick={() => dispatch(logout())}><i className="fi-rs-sign-out mr-10"></i>Logout</div>
                                  </li>
                               </ul>
                            </div>

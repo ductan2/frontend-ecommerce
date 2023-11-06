@@ -25,10 +25,15 @@ class Http {
 
                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                const data = error.response?.data as object | null | any | string
-               if (data.message === "Token has expired" && data.status === 401 || data.message === "Token is valid") {
+               console.log("🚀 ~ file: http.ts:28 ~ Http ~ constructor ~ data:", data)
+               if (data.message === "Token has expired" && data.status === 401) {
                   localStorage.removeItem("token")
                }
-               toast.error(data.error)
+               if (data.message !== "Token is invalid" && data.message || data.error) {
+                  toast.error(data.message || data.error || "Something went wrong")
+                  return;
+               }
+
             }
             return Promise.reject(error);
          }
