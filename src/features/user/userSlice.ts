@@ -208,12 +208,13 @@ export const userSlice = createSlice({
             state.isSuccess = true;
             localStorage.setItem("token", action.payload.token)
             const { search } = new URL(window.location.href);
+            console.log("🚀 ~ file: userSlice.ts:211 ~ .addCase ~ search:", search)
             if (state.isSuccess === true) {
                toast.success("Login successfully !", {
                   position: toast.POSITION.TOP_RIGHT
                });
                setTimeout(() => {
-                  window.location.href = search.substring(1)
+                  window.location.href = search.substring(1) === "login" ? "/" : search.substring(1)
                }, 1000)
             }
 

@@ -30,6 +30,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />} >
+            <Route path="*" element={<ErrorPage />} />
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
             <Route path="shop" element={<ShopTest />} />
@@ -55,7 +56,6 @@ function App() {
               element={<PrivateRoutes>
                 <Cart />
               </PrivateRoutes>} />
-            <Route path="*" element={<ErrorPage />} />
           </Route>
 
 
