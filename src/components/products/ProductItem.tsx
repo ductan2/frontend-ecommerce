@@ -38,9 +38,9 @@ export const ProductItem = ({ product }: props) => {
             </div>
             <div className="product-content-wrap">
                <div className="product-category">
-                  <a href="shop-grid-right.html">{product.category[0].title}</a>
-               </div>
-               <h2><Link to={`/shop/product/${product._id}`}>{product.title}</Link></h2>
+                  <div>{product.category[0].title}</div>
+               </div> 
+               <h2><Link to={`/shop/product/${product._id}`}>{product.title.length > 40 ? product.title.substring(0, 40) + "..." : product.title}</Link></h2>
                <div className="product-rate-cover">
                   <div className="product-rate d-inline-block">
                      <div className="product-rating" style={{ width: product.rating_distribution * 20 + "%" }}></div>

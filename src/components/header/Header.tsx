@@ -106,15 +106,14 @@ export const Header = ({ toggleClick, totalCartItems, totalWishlistItems }: Prop
                                  </div>
 
                                  <div className="header-action-icon-2">
-                                    <Link to="/page-account"><div>
-                                       <img
-                                          className="svgInject"
-                                          alt="Nest"
-                                          src="/assets/imgs/theme/icons/icon-user.svg"
-                                       />
-                                    </div>
-                                    </Link>
-                                    <Link to="/login">
+                                    <Link to={`${user && user._id ? "/account" : "/login"}`} className="d-flex">
+                                       <div>
+                                          <img
+                                             className="svgInject"
+                                             alt="Nest"
+                                             src="/assets/imgs/theme/icons/icon-user.svg"
+                                          />
+                                       </div>
                                        <div>
                                           <span className="lable ml-0">
                                              {user && user._id ? user.lastname + " " + user.firstname : (

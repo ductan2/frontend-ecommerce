@@ -34,14 +34,14 @@ const IntroPopup = () => {
                         }}
                      >
                         <div className="deal-top">
-                           <h2 className="text-brand">
-                              Deal of the Day
-                           </h2>
-                           <h5>Limited quantities.</h5>
+                           <h3 className="mb-10" >
+                              Coupon: <span className="text-brand">DUCTAN</span>
+                           </h3>
+                           <h4>Deal of the day receive a $20 discount</h4>
                         </div>
                         <div className="deal-content  detail-info">
                            <h6 className="product-title">
-                              <Link to="/shop-product-right">
+                              <Link to="/shop">
                                  <div className="text-heading">
                                     Organic fruit for your family's
                                     health
@@ -51,11 +51,11 @@ const IntroPopup = () => {
                            <div className="clearfix product-price-cover">
                               <div className="product-price primary-color float-left">
                                  <span className="current-price text-brand">
-                                    $38
+                                    $32
                                  </span>
                                  <span>
                                     <span className="save-price font-md color3 ml-15">
-                                       26% Off
+                                       $20 discount
                                     </span>
                                     <span className="old-price font-md ml-15">
                                        $52
@@ -66,10 +66,9 @@ const IntroPopup = () => {
                         </div>
                         <div className="deal-bottom">
                            <p className="mb-20">Hurry Up! Offer End In:</p>
-                           {/* <Timer endDateTime="2022-11-27 00:00:00" /> */}
                            <Timer
                               endDateTime={fixDate.setDate(
-                                 fixDate.getDate() + 2
+                                 fixDate.getDate() + 100
                               )}
                            />
                            <div className="product-detail-rating">

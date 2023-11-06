@@ -6,7 +6,7 @@ const msInMinute = 60 * 1000;
 const msInAHour = 60 * msInMinute;
 const msInADay = 24 * msInAHour;
 interface TimerProps {
-   endDateTime: number ; 
+   endDateTime: string | number;
 }
 const getPartsofTimeDuration = (duration: number) => {
    const days = Math.floor(duration / msInADay);

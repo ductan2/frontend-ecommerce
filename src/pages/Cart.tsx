@@ -149,6 +149,7 @@ export const Cart = () => {
       e.preventDefault()
       dispatch(appliedCoupon(coupon)).then(() => {
          setCoupon("")
+         dispatch(getCart())
       })
    }
    const handleChangeValue = (e: React.ChangeEvent<HTMLSelectElement>, option: string) => {
@@ -169,7 +170,7 @@ export const Cart = () => {
          setCurrentAddress({})
       }
    }
-   const handleUpdateAddress = (e: React.FormEvent<HTMLFormElement>) => {
+   const handleAddAddress = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       if (!address.district || !address.province || !address.wards) {
          toast.error("Please enter your address")
@@ -251,7 +252,7 @@ export const Cart = () => {
                      <div className="cart-action d-flex justify-content-between">
                         <Link to={"/shop"} className="btn "><i className="fi-rs-arrow-left mr-10"></i>Continue Shopping</Link>
                      </div>
-                     <form action="" onSubmit={handleUpdateAddress}>
+                     <form action="" onSubmit={handleAddAddress}>
                         <div className="row flex " style={{ alignItems: "end" }}>
                            <div className="col-3">
                               <SelectCustom defaultName={"Please enter your province"} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChangeValue(e, "province")} value={address.province} data={provinceList} />
@@ -367,7 +368,11 @@ export const Cart = () => {
                                        toast.info("Please choose current address!")
                                        return;
                                     }
-                                    dispatch(cashOrderByPaypal({ COD: false, payment_id: data.orderID, address: currentAddress }))
+                                    dispatch(cashOrderByPaypal({ COD: false, payment_id: data.orderID, address: currentAddress })).then(() => {
+                                       setTimeout(() => {
+                                          dispatch(getCart())
+                                       }, 300);
+                                    })
                                  }}
                                  onError={() => {
                                     alert("Transaction error");

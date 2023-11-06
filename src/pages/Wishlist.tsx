@@ -4,6 +4,7 @@ import { getWishList } from "../features/user/userSlice"
 import { useSelector } from "react-redux"
 import { Loading } from "../components/loading/Loading"
 import { removeToWishList } from "../features/product/productSlice"
+import { Link } from "react-router-dom"
 
 
 
@@ -67,7 +68,7 @@ export const Wishlist = () => {
                                     </td>
                                     <td className="image product-thumbnail pt-40"><img src={item.images[0].url} alt="#" /></td>
                                     <td className="product-des product-name">
-                                       <h6><a className="product-name mb-10" href="shop-product-right.html">{item.title}</a></h6>
+                                       <h6><Link to={`/product/${item._id}`} className="product-name mb-10" >{item.title}</Link></h6>
                                        <div className="product-rate-cover">
                                           <div className="product-rate d-inline-block">
                                              <div className="product-rating" style={{ width: "90%" }}></div>

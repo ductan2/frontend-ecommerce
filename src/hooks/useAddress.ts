@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch } from '../store/store';
 import { toast } from 'react-toastify';
-import { updateUser, getInfoUser } from '../features/user/userSlice';
+import { updateUser, getInfoUser, updateAddress, deleteAddress } from '../features/user/userSlice';
 import { Address } from '../types/user';
 
 const useAddress = () => {
@@ -72,10 +72,21 @@ const useAddress = () => {
          [option]: value
       }));
    };
+   const handleUpdateAddress = async (id: string) => {
+      if (!address.district || !address.province || !address.wards) {
+         toast.error('Please enter your address');
+         return;
+      }
 
+      dispatch(updateAddress({ id_address: id, address })).then(() => {
+         setTimeout(() => {
+            dispatch(getInfoUser());
+         }, 500);
+      });
+   }
    // Handle address update
-   const handleUpdateAddress = (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+   const handleAddAddress = async () => {
+
       if (!address.district || !address.province || !address.wards) {
          toast.error('Please enter your address');
          return;
@@ -87,15 +98,23 @@ const useAddress = () => {
          }, 500);
       });
    };
-
+   const handleDeleteAddress = async (id: string) => {
+      dispatch(deleteAddress({ id_address: id })).then(() => {
+         setTimeout(() => {
+            dispatch(getInfoUser());
+         }, 500);
+      });
+   }
    return {
       address,
       provinceList,
       districtList,
       wardsList,
       handleChangeValue,
+      handleAddAddress,
+      setAddress,
       handleUpdateAddress,
-      setAddress
+      handleDeleteAddress
    };
 };
 

@@ -17,15 +17,55 @@ const AccountAddress = () => {
       districtList,
       wardsList,
       handleChangeValue,
-      handleUpdateAddress,
-      setAddress
+      handleAddAddress,
+      handleDeleteAddress,
+      setAddress,
+      handleUpdateAddress
    } = useAddress();
+
+
+
    if (isLoading) return <Loading isFull />
+
+   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, id: string) => {
+      e.preventDefault()
+      if (id) {
+         await handleUpdateAddress(id).then(() => {
+            setOpenModal(false)
+            setAddress({
+               province: "",
+               district: "",
+               wards: "",
+               id: ""
+            })
+         })
+      }
+      else {
+         await handleAddAddress().then(() => {
+            setOpenModal(false)
+         })
+      }
+
+   }
 
    return (
       <>
          <div className="tab-content account dashboard-content pl-50">
             <div className="tab-pane fade active show" id="address" role="tabpanel" aria-labelledby="address-tab">
+               <div className="mb-30 text-end"  >
+                  <button type="button" className="btn btn-fill-out font-weight-bold" onClick={() => {
+                     setAddress({
+                        province: "",
+                        district: "",
+                        wards: "",
+                        id: ""
+                     })
+                     setTimeout(() => {
+                        setOpenModal(true)
+                     }, 200)
+                  }}>Add new address
+                  </button>
+               </div>
                <div className="card-header text-center">
                   <h3 className="mb-0 ">Your Address</h3>
                </div>
@@ -41,7 +81,7 @@ const AccountAddress = () => {
                      </thead>
                      <tbody>
                         {user && user.address?.map((item) => {
-                           return <tr>
+                           return <tr key={item.id}>
                               <td>{item.province}</td>
                               <td>{item.district}</td>
                               <td>{item.wards}</td>
@@ -54,7 +94,7 @@ const AccountAddress = () => {
                                        }, 200)
                                     }}
                                        className="text-success hover-text-success btn-small d-block">Edit</div>
-                                    <div className="text-danger hover-text-danger d-block">Delete</div>
+                                    <div className="text-danger hover-text-danger d-block" onClick={() => handleDeleteAddress(item.id as string)}>Delete</div>
                                  </div>
                               </td>
                            </tr>
@@ -65,7 +105,7 @@ const AccountAddress = () => {
             </div>
          </div>
          <ModalCustom openModal={openModal} setOpenModal={setOpenModal}>
-            <form action="" onSubmit={handleUpdateAddress}>
+            <form action="" onSubmit={(e) => handleSubmit(e, address.id as string)}>
                <div className="row flex " style={{ alignItems: "end" }}>
                   <div className="col-4">
                      <SelectCustom defaultName={"Please enter your province"}

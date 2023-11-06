@@ -39,7 +39,6 @@ const appliedCoupon = async (coupon: string) => {
    return http.patch(`/users/apply-coupon`, { coupon }, auth)
 }
 const updateUser = async (data: UserUpdate) => {
-   console.log("🚀 ~ file: userService.ts:42 ~ updateUser ~ data:", data)
    return http.patch(`/users/update-user`, data, auth)
 }
 const logout = async () => {
@@ -48,13 +47,18 @@ const logout = async () => {
 const forgotPassword = async (email: string) => {
    return http.post(`/users/forgot-password-token`, { email })
 }
-const resetPassword = async (password: string,confirmPassword:string, token: string) => {
-   return http.put(`/users/reset-password/${token}`, { password,confirmPassword })
+const resetPassword = async (password: string, confirmPassword: string, token: string) => {
+   return http.put(`/users/reset-password/${token}`, { password, confirmPassword })
 }
-
+const updateAddress = async (id_address: string, address: Address[]) => {
+   return http.put(`/users/update-user-address/${id_address}`, { address }, auth)
+}
+const deleteAddress = async (id_address: string) => {
+   return http.delete(`/users/delete-user-address/${id_address}`, auth)
+}
 const userService = {
    registerUser, loginUser, getWishList, addToCart, getCart, deleteCartItem, emptyCart,
    updateCartQuantity, cashOrderByPaypal, appliedCoupon, getInfoUser, updateUser, logout,
-   forgotPassword,resetPassword
+   forgotPassword, resetPassword, updateAddress, deleteAddress
 }
 export default userService;

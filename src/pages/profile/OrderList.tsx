@@ -1,14 +1,16 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { RootState, useAppDispatch } from "../../store/store"
-import { getOrder } from "../../features/orders/orderSlice"
+import { getOrder, getOrderById } from "../../features/orders/orderSlice"
 import { useSelector } from "react-redux"
 import { Loading } from "../../components/loading/Loading"
 import dayjs from "dayjs"
+import ModalCustom from "../../components/modal/ModalCustom"
+import { Link } from "react-router-dom"
 const OrderList = () => {
    const dispatch = useAppDispatch()
+   const [openModal, setOpenModal] = useState(false)
+   const { data, isLoading, dataUpdate } = useSelector((state: RootState) => state.order)
 
-   const { data, isLoading } = useSelector((state: RootState) => state.order)
-   console.log("🚀 ~ file: OrderList.tsx:11 ~ OrderList ~ data:", data)
    useEffect(() => {
       dispatch(getOrder())
    }, [dispatch])
@@ -42,8 +44,15 @@ const OrderList = () => {
                               <td>{item.order_status}</td>
                               <td>${item.payment_intent.amount} for {item.products.length} item</td>
                               <td>
-                                 <a href="#" className="btn-small d-block">View</a>
-                              
+                                 <div onClick={() => {
+                                    dispatch(getOrderById(item._id)).then(() => {
+                                       setTimeout(() => {
+                                          setOpenModal(true)
+                                       }, 300)
+                                    })
+
+                                 }}
+                                    className="btn-small text-success hover-text-success ">View</div>
                               </td>
                            </tr>
                         })}
@@ -52,8 +61,44 @@ const OrderList = () => {
                   </table>
                </div>
             </div>
-         </div>
-
+         </div >
+         <ModalCustom openModal={openModal} setOpenModal={setOpenModal}>
+            {dataUpdate?._id && (
+               <div>
+                  <h1 className="text-center">Order details</h1>
+                  {dataUpdate.products.map(({ product, count, color, price }) => {
+                     return <div className="col-lg-4 col-md-6 col-12 col-sm-6" >
+                        <div className="product-cart-wrap mb-30">
+                           <div className="product-img-action-wrap">
+                              <div className="product-img product-img-zoom">
+                                 <Link to={`/shop/product/${product?._id}`}>
+                                    <img className="default-img" src={product?.images[0].url} alt={product.title} />
+                                    {product?.images[1] && product?.images[1].url ?
+                                       <img className="hover-img" src={product?.images[1].url} alt={product.title + "2"} /> : null}
+                                 </Link>
+                              </div>
+                           </div>
+                        </div>
+                        <div className="product-content-wrap">
+                           <p><Link to={`/shop/product/${product._id}`}>{product.title.length > 40 ? product.title.substring(0, 40) + "..." : product.title}</Link></p>
+                           <div>
+                           </div>
+                           <div className="product-card-bottom">
+                              <div className="product-price d-flex justify-content-between">
+                                 <span>${product.price} / 1 product</span>
+                                 <span>Quantity:{count}</span>
+                              </div>
+                              <div>
+                                 <span className="font-small text-muted">Color:<a href="#">{color}</a></span>
+                              </div>
+                           </div>
+                           <h5>Total: <span className="text-success">${price}</span></h5>
+                        </div>
+                     </div>
+                  })}
+               </div>
+            )}
+         </ModalCustom >
 
 
       </>

@@ -1,4 +1,5 @@
-import { ProductType } from "./ApiType";
+
+import { Product } from "./product";
 
 interface Payment_intent_type {
    id: string
@@ -8,9 +9,10 @@ interface Payment_intent_type {
 }
 
 interface ProductOrder {
-   product: ProductType;
+   product: Product;
    count: number;
    price: number;
+   color: string;
 }
 export enum statusOrder {
    CASH_ON_DELIVERY = "Cash on delivery",

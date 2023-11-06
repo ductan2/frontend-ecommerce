@@ -1,20 +1,27 @@
- <article className="col-xl-3 col-lg-4 col-md-6 text-center hover-up mb-30 animated">
-                              <div className="post-thumb">
-                                 <a href="blog-post-right.html">
-                                    <img className="border-radius-15" src="assets/imgs/blog/blog-15.png" alt="" />
-                                 </a>
-                              </div>
-                              <div className="entry-content-2">
-                                 <h6 className="mb-10 font-sm"><a className="entry-meta text-muted" href="blog-category-grid.html">Vegetarian</a></h6>
-                                 <h4 className="post-title mb-15">
-                                    <a href="blog-post-right.html">The litigants on the screen are not actors</a>
-                                 </h4>
-                                 <div className="entry-meta font-xs color-grey mt-10 pb-10">
-                                    <div>
-                                       <span className="post-on mr-10">25 April 2022</span>
-                                       <span className="hit-count has-dot mr-10">126k Views</span>
-                                       <span className="hit-count has-dot">4 mins read</span>
-                                    </div>
-                                 </div>
-                              </div>
-                           </article>
+  orderItem.products.map(({ product }) => {
+                  if (!product) return null
+                  return <div className="col-lg-1-5 col-md-4 col-12 col-sm-6" >
+                     <div className="product-cart-wrap mb-30">
+                        <div className="product-img-action-wrap">
+                           <div className="product-img product-img-zoom">
+                              <Link to={`/shop/product/${product?._id}`}>
+                                 <img className="default-img" src={product?.images[0].url} alt={product.title} />
+                                 {product?.images[1] && product?.images[1].url ?
+                                    <img className="hover-img" src={product?.images[1].url} alt={product.title + "2"} /> : null}
+                              </Link>
+                           </div>
+                        </div>
+                     </div>
+                     <div className="product-content-wrap">
+
+                        <h2><Link to={`/shop/product/${product._id}`}>{product.title.length > 40 ? product.title.substring(0, 40) + "..." : product.title}</Link></h2>
+                        <div>
+                        </div>
+                        <div className="product-card-bottom">
+                           <div className="product-price">
+                              <span>${product.price}</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               })

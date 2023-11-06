@@ -50,7 +50,24 @@ export const updateUser = createAsyncThunk<User, UserUpdate>("user/update", asyn
       return thunkAPI.rejectWithValue(error);
    }
 })
-
+export const updateAddress = createAsyncThunk<User, { id_address: string, address: Address }>("user/update-address", async ({ address, id_address }, thunkAPI) => {
+   try {
+      const arrAddress = []
+      arrAddress[0] = address
+      const response = await userService.updateAddress(id_address, arrAddress);
+      return response.data.result;
+   } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+   }
+})
+export const deleteAddress = createAsyncThunk<User, { id_address: string }>("user/delete-address", async ({ id_address }, thunkAPI) => {
+   try {
+      const response = await userService.deleteAddress(id_address);
+      return response.data.result;
+   } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+   }
+})
 export const getWishList = createAsyncThunk("user/get-wish-list", async (): Promise<Product[]> => {
    const response: AxiosResponse<{ result: Product[] }> = await userService.getWishList();
    return response.data.result;
@@ -407,6 +424,44 @@ export const userSlice = createSlice({
             if (action.payload) {
                state.errorResponse = (action.payload as ErrorResponseAxios).response?.data || []
             }
+         })
+         .addCase(updateAddress.pending, (state) => {
+            state.isLoading = true;
+         })
+         .addCase(updateAddress.fulfilled, (state) => {
+            state.isLoading = false;
+            state.isError = false
+            state.isSuccess = true;
+            if (state.isSuccess) {
+               toast.success("Update address successfully !", {
+                  position: toast.POSITION.TOP_RIGHT
+               });
+
+            }
+         })
+         .addCase(updateAddress.rejected, (state) => {
+            state.isLoading = false;
+            state.isError = true
+            state.isSuccess = false;
+         })
+         .addCase(deleteAddress.pending, (state) => {
+            state.isLoading = true;
+         })
+         .addCase(deleteAddress.fulfilled, (state) => {
+            state.isLoading = false;
+            state.isError = false
+            state.isSuccess = true;
+            if (state.isSuccess) {
+               toast.success("Delete address successfully !", {
+                  position: toast.POSITION.TOP_RIGHT
+               });
+
+            }
+         })
+         .addCase(deleteAddress.rejected, (state) => {
+            state.isLoading = false;
+            state.isError = true
+            state.isSuccess = false;
          })
    },
 })
