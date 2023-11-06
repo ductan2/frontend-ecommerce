@@ -1,4 +1,4 @@
-const PORT=4000
-export const server_url = `http://localhost:${PORT}`
+// const PORT = 4000
+export const server_url = "https://ecommerce-market-api.vercel.app/"
 
 
