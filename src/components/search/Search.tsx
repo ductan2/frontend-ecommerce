@@ -1,5 +1,5 @@
 // import { useRouter } from "next/router";
-import React, { useState } from "react";
+import  { useState } from "react";
 
 const Search = () => {
    const [searchTerm, setSearchTerm] = useState("");

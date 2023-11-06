@@ -13,7 +13,7 @@ export const CommentStar = ({setHoverStar,setRating,rating,hoverStar}:Props) => 
    return (
       <>
          <div>
-            {[...Array(5)].map((star, i) => {
+            {[...Array(5)].map((_, i) => {
                const currentStar = i + 1;
 
                return <label className='comment-rating' key={uuidv4()}>
