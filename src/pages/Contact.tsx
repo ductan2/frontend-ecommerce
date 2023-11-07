@@ -1,15 +1,43 @@
+import { useFormik } from "formik"
+import { RootState, useAppDispatch } from "../store/store"
+import { ContactType } from "../types/contact"
+import * as yup from "yup"
+import { InputCustom } from "../components/input/InputCustom"
+import { createContact } from "../features/contact/contactSlice"
+import { useSelector } from "react-redux"
+import { Loading } from "../components/loading/Loading"
+const contactSchema = yup.object().shape({
+   email: yup.string().email("Invalid email").required("Email is required"),
+   name: yup.string().required("Name is required"),
+   subject: yup.string().required("Subject is required"),
+   message: yup.string().required("Message is required"),
+   phone: yup.string().required("Phone is required"),
+})
 const Contact = () => {
+
+   const dispatch = useAppDispatch()
+
+   const formik = useFormik<ContactType>({
+      initialValues: {
+         email: "",
+         message: "",
+         name: "",
+         subject: "",
+         phone: "",
+      },
+      validationSchema: contactSchema,
+      onSubmit: (values) => {
+         dispatch(createContact(values)).then(() => {
+            formik.resetForm()
+         })
+      }
+   })
+   const { isLoading } = useSelector((state: RootState) => state.contact)
+
    return (
       <>
          <main className="main pages">
-            <div className="page-header breadcrumb-wrap">
-               <div className="container">
-                  <div className="breadcrumb">
-                     <a href="index.html" rel="nofollow"><i className="fi-rs-home mr-5" />Home</a>
-                     <span /> Pages <span /> Contact
-                  </div>
-               </div>
-            </div>
+          
             <div className="page-content pt-50">
                <div className="container">
                   <div className="row">
@@ -49,40 +77,57 @@ const Contact = () => {
                   <div className="row">
                      <div className="col-xl-10 col-lg-12 m-auto">
                         <section className="mb-50">
-                          
+
                            <div className="row">
                               <div className="col-xl-8">
                                  <div className="contact-from-area padding-20-row-col">
                                     <h5 className="text-brand mb-10">Contact form</h5>
                                     <h2 className="mb-10">Drop Us a Line</h2>
                                     <p className="text-muted mb-30 font-sm">Your email address will not be published. Required fields are marked *</p>
-                                    <form className="contact-form-style mt-30" id="contact-form" action="#" method="post">
+                                    <form onSubmit={formik.handleSubmit} className="contact-form-style mt-30" id="contact-form">
                                        <div className="row">
                                           <div className="col-lg-6 col-md-6">
-                                             <div className="input-style mb-20">
-                                                <input name="name" placeholder="First Name" type="text" />
-                                             </div>
+                                             <InputCustom name="name" type="text"
+                                                placeholder="Name"
+                                                value={formik.values.name}
+                                                errorMessage={formik.touched.name && formik.errors.name}
+                                                onBlur={formik.handleBlur('name')}
+                                                onChange={formik.handleChange('name')} />
                                           </div>
                                           <div className="col-lg-6 col-md-6">
-                                             <div className="input-style mb-20">
-                                                <input name="email" placeholder="Your Email" type="email" />
-                                             </div>
+                                             <InputCustom name="email" type="text"
+                                                placeholder="Email"
+                                                value={formik.values.email}
+                                                errorMessage={formik.touched.email && formik.errors.email}
+                                                onBlur={formik.handleBlur('email')}
+                                                onChange={formik.handleChange('email')} />
                                           </div>
                                           <div className="col-lg-6 col-md-6">
-                                             <div className="input-style mb-20">
-                                                <input name="telephone" placeholder="Your Phone" type="tel" />
-                                             </div>
+                                             <InputCustom name="phone" type="text"
+                                                placeholder="Phone"
+                                                value={formik.values.phone}
+                                                errorMessage={formik.touched.phone && formik.errors.phone}
+                                                onBlur={formik.handleBlur('phone')}
+                                                onChange={formik.handleChange('phone')} />
                                           </div>
                                           <div className="col-lg-6 col-md-6">
-                                             <div className="input-style mb-20">
-                                                <input name="subject" placeholder="Subject" type="text" />
-                                             </div>
+                                             <InputCustom name="subject" type="text"
+                                                placeholder="Subject"
+                                                value={formik.values.subject}
+                                                errorMessage={formik.touched.subject && formik.errors.subject}
+                                                onBlur={formik.handleBlur('subject')}
+                                                onChange={formik.handleChange('subject')} />
                                           </div>
                                           <div className="col-lg-12 col-md-12">
                                              <div className="textarea-style mb-30">
-                                                <textarea name="message" placeholder="Message" defaultValue={""} />
+                                                <textarea value={formik.values.message}
+                                                   name="message" placeholder="Message" onBlur={formik.handleBlur('message')}
+                                                   onChange={formik.handleChange('message')} />
+                                                {formik.touched.message && formik.errors.message && <span className="text-danger">{formik.touched.message && formik.errors.message}</span>}
                                              </div>
-                                             <button className="submit submit-auto-width" type="submit">Send message</button>
+                                             <button className="submit submit-auto-width" type="submit">{
+                                                isLoading ? <Loading /> : "Send message"
+                                             }</button>
                                           </div>
                                        </div>
                                     </form>

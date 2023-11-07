@@ -8,6 +8,7 @@ import categoryProcReducer from "../features/categoryProduct/categoryProcSlice"
 import blogReducer from "../features/blog/blogSlice"
 import uploadReducer from "../features/uploads/uploadSlice"
 import orderReducer from "../features/orders/orderSlice"
+import contactReducer from "../features/contact/contactSlice"
 export const store = configureStore({
    reducer: {
       user: userReducer,
@@ -18,6 +19,7 @@ export const store = configureStore({
       blogs: blogReducer,
       upload: uploadReducer,
       order: orderReducer,
+      contact: contactReducer,
    },
 })
 export type RootState = ReturnType<typeof store.getState>

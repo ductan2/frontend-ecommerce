@@ -13,7 +13,7 @@ export const Wishlist = () => {
 
    const dispatch = useAppDispatch()
    const { wishlist, isLoading } = useSelector((state: RootState) => state.user)
-
+   
    useEffect(() => {
       dispatch(getWishList())
    }, [dispatch])
@@ -24,7 +24,6 @@ export const Wishlist = () => {
          dispatch(getWishList())
       }, 200);
    }
-   console.log(wishlist)
    if (isLoading) return <Loading />
    return (
       <>
