@@ -288,7 +288,7 @@ export const Header = ({ toggleClick, totalCartItems, totalWishlistItems }: Prop
                         <div className="header-action-right  d-flex d-lg-none  ">
                            <div className="header-action-2">
                               <div className="header-action-icon-2">
-                                 <Link to="/shop-wishlist">
+                                 <Link to="/wishlist">
                                     <div>
                                        <img
                                           alt="Evara"
@@ -301,7 +301,7 @@ export const Header = ({ toggleClick, totalCartItems, totalWishlistItems }: Prop
                                  </Link>
                               </div>
                               <div className="header-action-icon-2">
-                                 <Link to="/shop-cart">
+                                 <Link to="/cart">
                                     <div className="mini-cart-icon">
                                        <img
                                           alt="Evara"

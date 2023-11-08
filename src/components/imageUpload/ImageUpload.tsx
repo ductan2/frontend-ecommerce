@@ -9,7 +9,6 @@ type props = {
 }
 
 const ImageUpload = ({ image, handleDeleteImage, isLoadingImage, className }: props) => {
-   console.log("🚀 ~ file: ImageUpload.tsx:12 ~ ImageUpload ~ image:", image)
    return (
       <div className="image-upload ">
          {isLoadingImage ? <Loading isFull /> :

@@ -33,23 +33,24 @@ export const Blog = () => {
                      <div className="loop-grid">
                         <div className="row">
                            {data && data?.map((item) => (
-                              <article style={{ minHeight: "520px" }} className="col-xl-3 col-lg-4 col-md-6 text-center hover-up mb-30 animated">
+                              <article style={{ minHeight: "350px" }} className="col-xl-3 col-lg-4 col-md-6 text-center hover-up mb-30 animated">
                                  <div className="post-thumb">
                                     <Link to={`/blog/${item._id}`}>
-                                       <img className="border-radius-15" src={(item.images as UploadImageType).url || item.images as string} alt="" />
+                                       <img className="border-radius-15" style={{ maxHeight: "160px", minWidth: "200px", objectFit: "cover" }} src={(item.images as UploadImageType).url || item.images as string} alt="" />
                                     </Link>
 
                                  </div>
                                  <div className="entry-content-2">
-                                    <h6 className="mb-10 font-sm"><a className="entry-meta text-muted" href="blog-category-grid.html">{
-                                       item.category.length > 3 ?
-                                          item.category.slice(0, 3).map((cate) => {
-                                             return cate.title
-                                          }).join(" ") + "..." :
-                                          item.category.map((cate) => {
-                                             return cate.title
-                                          }).join(" ")
-                                    }</a></h6>
+                                    <h6 className="mb-10 font-sm">
+                                       <Link className="entry-meta text-muted" to={`/blog/${item._id}`} > {
+                                          item.category.length > 3 ?
+                                             item.category.slice(0, 3).map((cate) => {
+                                                return cate.title
+                                             }).join(" ") + "..." :
+                                             item.category.map((cate) => {
+                                                return cate.title
+                                             }).join(" ")
+                                       }</Link></h6>
                                     <h4 className="post-title mb-15">
                                        <Link to={`/blog/${item._id}`}>
                                           {item.title.length > 30 ? item.title.substring(0, 30) + "..." : item.title}
@@ -72,6 +73,6 @@ export const Blog = () => {
                </div>
             </div>
          </div>
-      </main>
+      </main >
    )
 }

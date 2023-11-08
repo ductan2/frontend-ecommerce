@@ -1,6 +1,8 @@
 import React, { useState, RefObject } from "react";
 import { Link } from "react-router-dom"
 import useClickOutside from "../hooks/useClickOutSide";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 interface Props {
    isToggled: boolean;
@@ -8,6 +10,7 @@ interface Props {
 }
 
 export const MobileMenu: React.FC<Props> = ({ isToggled, toggleClick }: Props) => {
+   const { user } = useSelector((state: RootState) => state.user)
    const [isActive, setIsActive] = useState({
       status: false,
       key: 0,
@@ -71,83 +74,7 @@ export const MobileMenu: React.FC<Props> = ({ isToggled, toggleClick }: Props) =
                               Categories
                            </div>
                         </Link>
-                        <div className="categori-dropdown-wrap categori-dropdown-active-small">
-                           <ul>
-                              <li>
-                                 <Link to="/shop">
-                                    <div>
-                                       <i className="evara-font-dress"></i>
-                                       Women's Clothing
-                                    </div>
-                                 </Link>
-                              </li>
-                              <li>
-                                 <Link to="/shop">
-                                    <div>
-                                       <i className="evara-font-tshirt"></i>
-                                       Men's Clothing
-                                    </div>
-                                 </Link>
-                              </li>
-                              <li>
-                                 {" "}
-                                 <Link to="/shop">
-                                    <div>
-                                       <i className="evara-font-smartphone"></i>{" "}
-                                       Cellphones
-                                    </div>
-                                 </Link>
-                              </li>
-                              <li>
-                                 <Link to="/shop">
-                                    <div>
-                                       <i className="evara-font-desktop"></i>
-                                       Computer & Office
-                                    </div>
-                                 </Link>
-                              </li>
-                              <li>
-                                 <Link to="/shop">
-                                    <div>
-                                       <i className="evara-font-cpu"></i>
-                                       Consumer Electronics
-                                    </div>
-                                 </Link>
-                              </li>
-                              <li>
-                                 <Link to="/shop">
-                                    <div>
-                                       <i className="evara-font-home"></i>
-                                       Home & Garden
-                                    </div>
-                                 </Link>
-                              </li>
-                              <li>
-                                 <Link to="/shop">
-                                    <div>
-                                       <i className="evara-font-high-heels"></i>
-                                       Shoes
-                                    </div>
-                                 </Link>
-                              </li>
-                              <li>
-                                 <Link to="/shop">
-                                    <div>
-                                       <i className="evara-font-teddy-bear"></i>
-                                       Mother & Kids
-                                    </div>
-                                 </Link>
-                              </li>
-                              <li>
-                                 <Link to="/shop">
-                                    <div>
-                                       <i className="evara-font-kite"></i>
-                                       Outdoor fun
-                                    </div>
-                                 </Link>
-                              </li>
-                           </ul>
-                        </div>
+
                      </div>
 
                      <nav>
@@ -160,7 +87,7 @@ export const MobileMenu: React.FC<Props> = ({ isToggled, toggleClick }: Props) =
                               }
                            >
 
-                              <Link to="/index">
+                              <Link to="/">
                                  <div>Home</div>
                               </Link>
                            </li>
@@ -200,56 +127,37 @@ export const MobileMenu: React.FC<Props> = ({ isToggled, toggleClick }: Props) =
                                  <div>About</div>
                               </Link>
                            </li>
+                           <li
+                              className={
+                                 isActive.key == 5
+                                    ? "menu-item-has-children active"
+                                    : "menu-item-has-children"
+                              }
+                           >
+                              <Link to="/contact">
+                                 <div>Contact</div>
+                              </Link>
+                           </li>
                         </ul>
                      </nav>
                   </div>
                   <div className="mobile-header-info-wrap mobile-header-border">
                      <div className="single-mobile-header-info">
-                        <Link to="/page-login-register">
-                           <div>Log In / Sign Up </div>
-                        </Link>
-                     </div>
-                     <div className="single-mobile-header-info">
-                        <Link to="#">
-                           <div>0397184208 </div>
-                        </Link>
+                        {user && user._id ? (
+                           <Link to={"/account"} className="d-flex text-success hover-text-success" style={{alignItems:"center",gap:"10px"}}>
+                              <div>
+                                 <img className="svgInject" alt="Nest" src="/assets/imgs/theme/icons/icon-user.svg" />
+                              </div>
+                              <span>{user.lastname + " " + user.firstname}</span>
+                           </Link>
+                        ) : <>
+                           <Link to="/login">
+                              <div>Log In / Sign Up </div>
+                           </Link>
+                        </>}
                      </div>
                   </div>
-                  <div className="mobile-social-icon">
-                     <h5 className="mb-15 text-grey-4">Follow Us</h5>
-                     <Link to="#">
-                        <div>
-                           <img
-                              src="/assets/imgs/theme/icons/icon-facebook.svg"
-                              alt=""
-                           />
-                        </div>
-                     </Link>
-                     <Link to="#">
-                        <div>
-                           <img
-                              src="/assets/imgs/theme/icons/icon-twitter.svg"
-                              alt=""
-                           />
-                        </div>
-                     </Link>
-                     <Link to="#">
-                        <div>
-                           <img
-                              src="/assets/imgs/theme/icons/icon-instagram.svg"
-                              alt=""
-                           />
-                        </div>
-                     </Link>
-                     <Link to="#">
-                        <div>
-                           <img
-                              src="/assets/imgs/theme/icons/icon-youtube.svg"
-                              alt=""
-                           />
-                        </div>
-                     </Link>
-                  </div>
+
                </div>
             </div>
          </div>

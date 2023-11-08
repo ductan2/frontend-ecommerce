@@ -22,9 +22,9 @@ export const ProductItem = ({ product }: props) => {
             <div className="product-img-action-wrap">
                <div className="product-img product-img-zoom">
                   <Link to={`/shop/product/${product._id}`}>
-                     <img className="default-img" src={product.images[0].url} alt={product.title} />
+                     <img className="default-img" src={product.images[0]?.url} alt={product.title} />
                      {product.images[1] && product.images[1].url ?
-                        <img className="hover-img" src={product.images[1].url} alt={product.title + "2"} /> : null}
+                        <img className="hover-img" src={product.images[1]?.url} alt={product.title + "2"} /> : null}
                   </Link>
                </div>
                <div className="product-action-1 d-flex">

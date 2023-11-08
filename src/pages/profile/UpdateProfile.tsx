@@ -25,9 +25,9 @@ const updateSchema = yup.object().shape({
 const UpdateProfile = () => {
    const dispatch = useAppDispatch()
    const { user, errorResponse } = useSelector((state: RootState) => state.user)
-   console.log("🚀 ~ file: UpdateProfile.tsx:28 ~ UpdateProfile ~ user:", user)
    const { data: dataUpload, isLoading: isLoadingImage } = useSelector((state: RootState) => state.upload)
-
+   
+   console.log("🚀 ~ file: UpdateProfile.tsx:28 ~ UpdateProfile ~ user:", user)
    const formik = useFormik({
       initialValues: {
          firstname: user.firstname,
@@ -143,9 +143,9 @@ const UpdateProfile = () => {
                               <ImageUpload image={dataUpload.url} isLoadingImage={isLoadingImage}
                                  handleDeleteImage={() => handleDeleteImage(dataUpload.public_id)} />
                            </> : <>
-                              <ImageUpload image={typeof user.avatar !== "string" && user.avatar?.url !== undefined
-                                 ? user.avatar.url : undefined}
-                                 handleDeleteImage={() => handleDeleteImage(typeof user.avatar !== "string" ? user.avatar!.public_id : "")} /></>}
+                              <ImageUpload isLoadingImage={isLoadingImage} image={typeof user.avatar !== "string" && user.avatar?.url !== undefined
+                                 ? user.avatar.url : user.avatar as string} 
+                                 handleDeleteImage={() => handleDeleteImage(typeof user.avatar !== "string" ? user.avatar!.public_id  : "")} /></>}
 
                         </div>
 

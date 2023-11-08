@@ -28,14 +28,7 @@ export const Wishlist = () => {
    return (
       <>
          <main className="main">
-            <div className="page-header breadcrumb-wrap">
-               <div className="container">
-                  <div className="breadcrumb">
-                     <a href="index.html" rel="nofollow"><i className="fi-rs-home mr-5"></i>Home</a>
-                     <span></span> Shop <span></span> Fillter
-                  </div>
-               </div>
-            </div>
+            
             <div className="container mb-30 mt-50">
                <div className="row">
                   <div className="col-xl-10 col-lg-12 m-auto">

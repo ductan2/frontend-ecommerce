@@ -254,16 +254,16 @@ export const Cart = () => {
                      </div>
                      <form action="" onSubmit={handleAddAddress}>
                         <div className="row flex " style={{ alignItems: "end" }}>
-                           <div className="col-3">
+                           <div className="col-lg-3">
                               <SelectCustom defaultName={"Please enter your province"} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChangeValue(e, "province")} value={address.province} data={provinceList} />
                            </div>
-                           <div className="col-3">
+                           <div className="col-lg-3">
                               <SelectCustom defaultName={"Please enter your district"} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChangeValue(e, "district")} value={address.district} data={districtList} />
                            </div>
-                           <div className="col-3">
+                           <div className="col-lg-3">
                               <SelectCustom defaultName={"Please enter your wards"} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChangeValue(e, "wards")} value={address.wards} data={wardsList} />
                            </div>
-                           <div className="col-3">
+                           <div className="col-lg-3 mt-5">
                               <button type="submit" className="btn ">Add address</button>
                            </div>
                         </div>
@@ -373,9 +373,10 @@ export const Cart = () => {
                                           dispatch(getCart())
                                        }, 300);
                                     })
+                                    return;
                                  }}
                                  onError={() => {
-                                    alert("Transaction error");
+                                    toast.error("Cart is empty or payment failed!")
                                  }}
                               />
                            </div>) :

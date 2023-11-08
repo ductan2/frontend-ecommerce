@@ -12,7 +12,7 @@ import { getAllCategoryProduct } from "../features/categoryProduct/categoryProcS
 import { useFilter } from "../hooks/useFilter"
 import { Pagination } from "../components/pagination/Pagination"
 
-export const ShopTest = () => {
+export const Shop = () => {
    const { data, isLoading, filterData, currentPage, showPagination, totalFilteredPages, limitPerPage } = useSelector((state: RootState) => state.products);
    const brands = useSelector((state: RootState) => state.brands.data);
    const categoryProduct = useSelector((state: RootState) => state.categoryProc.data);

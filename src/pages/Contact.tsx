@@ -6,6 +6,7 @@ import { InputCustom } from "../components/input/InputCustom"
 import { createContact } from "../features/contact/contactSlice"
 import { useSelector } from "react-redux"
 import { Loading } from "../components/loading/Loading"
+import { useEffect } from "react"
 const contactSchema = yup.object().shape({
    email: yup.string().email("Invalid email").required("Email is required"),
    name: yup.string().required("Name is required"),
@@ -32,12 +33,15 @@ const Contact = () => {
          })
       }
    })
+   useEffect(() => {
+      window.scrollTo(0, 0)
+   }, [])
    const { isLoading } = useSelector((state: RootState) => state.contact)
 
    return (
       <>
          <main className="main pages">
-          
+
             <div className="page-content pt-50">
                <div className="container">
                   <div className="row">

@@ -10,7 +10,7 @@ import { SingleProduct } from "./pages/SingleProduct"
 import { Cart } from "./pages/Cart"
 import { Blog } from "./pages/Blog"
 import { PrivateRoutes } from "./routing/PrivateRoutes"
-import { ShopTest } from "./pages/ShopTest"
+import { Shop } from "./pages/Shop"
 import SingleBlog from "./pages/SingleBlog"
 import MyAccount from "./pages/MyAccount"
 import Contact from "./pages/Contact"
@@ -33,7 +33,7 @@ function App() {
             <Route path="*" element={<ErrorPage />} />
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
-            <Route path="shop" element={<ShopTest />} />
+            <Route path="shop" element={<Shop />} />
             <Route path="wishlist" element={<PrivateRoutes><Wishlist /></PrivateRoutes>} />
             <Route path="shop/product/:id" element={<SingleProduct />} />
             <Route path="blog/:id" element={<SingleBlog />} />

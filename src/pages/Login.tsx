@@ -1,20 +1,40 @@
-import { Link, Navigate } from "react-router-dom"
+import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom"
 import { RootState, useAppDispatch } from "../store/store"
 import { UserLogin } from "../types/user"
 import { useFormik } from "formik"
 import * as yup from "yup"
-import { loginUser } from "../features/user/userSlice"
+import { getInfoUser, loginUser } from "../features/user/userSlice"
 import { InputCustom } from "../components/input/InputCustom"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { Loading } from "../components/loading/Loading"
+import { toast } from "react-toastify"
 const loginShema = yup.object().shape({
    email: yup.string().email("Invalid email").required("Email is required"),
    password: yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
 })
-export const Login = () => {
-   const dispatch = useAppDispatch()
 
+const getGoogleAuth = () => {
+   const { VITE_GOOGLE_REDICRET_URI, VITE_GOOGLE_CLIENT_ID } = import.meta.env
+   const url = "https://accounts.google.com/o/oauth2/auth"
+   const query = {
+      client_id: VITE_GOOGLE_CLIENT_ID,
+      redirect_uri: VITE_GOOGLE_REDICRET_URI,
+      response_type: "code",
+      scope: [
+         "https://www.googleapis.com/auth/userinfo.profile ",
+         "https://www.googleapis.com/auth/userinfo.email",
+      ].join(" "),
+      prompt: "consent",
+   }
+   const queryString = new URLSearchParams(query).toString()
+   return `${url}?${queryString}`
+}
+const googleAuth = getGoogleAuth()
+export const Login = () => {
+   const navigate = useNavigate()
+   const dispatch = useAppDispatch()
+   const [params] = useSearchParams()
    const formik = useFormik<UserLogin>({
       initialValues: {
          email: "",
@@ -38,6 +58,19 @@ export const Login = () => {
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [errorResponse])
+
+   useEffect(() => {
+      const access_token = params.get("access_token")
+      if (access_token) {
+         localStorage.setItem("token", access_token)
+         toast.success("Login success")
+         dispatch(getInfoUser())
+         setTimeout(() => {
+            navigate('/')
+            window.location.reload()
+         }, 500)
+      }
+   }, [params, navigate, dispatch])
 
    if (user && user._id) {
       console.log("navigate")
@@ -84,12 +117,20 @@ export const Login = () => {
                                           </div>
                                           <Link className="text-muted" to="/forgot-password">Forgot password?</Link>
                                        </div>
+
                                        <div className="form-group">
                                           <button type="submit" className="btn btn-heading btn-block hover-up w-full" name="login">
                                              {!isLoading ? "Login" : <Loading />}
                                           </button>
                                        </div>
                                     </form>
+                                    <div className="card-login p-0 m-0" style={{ border: "none" }}>
+                                       <Link to={googleAuth} className="social-login google-login">
+                                          <img src="assets/imgs/theme/icons/logo-google.svg" alt="" />
+                                          <span>Continue with Google</span>
+                                       </Link>
+                                    </div>
+
                                  </div>
                               </div>
                            </div>
