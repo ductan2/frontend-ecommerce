@@ -75,7 +75,6 @@ export const productSlice = createSlice({
    reducers: {
       filterProducts: (state, action) => {
          const { selectedBrand, selectedCategories, priceRange } = action.payload;
-         console.log(state.filterData)
          state.filterData = state.data.filter(item => {
             const brandMatch = selectedBrand ? item.brand === selectedBrand : true;
             const categoryMatch = selectedCategories.every((category: string) => item.category.some(cat => cat.title === category));
@@ -84,6 +83,7 @@ export const productSlice = createSlice({
             return brandMatch && categoryMatch && priceMatch;
          });
          state.totalFilteredPages = Math.ceil(state.filterData.length / state.limitPerPage);
+         state.currentPage = 1;
       },
       sortProducts: (state, action) => {
          switch (action.payload) {

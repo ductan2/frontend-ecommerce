@@ -1,5 +1,4 @@
 import axios, { type AxiosError, AxiosInstance } from "axios"
-import { server_url } from "./dir";
 import { toast } from "react-toastify";
 
 
@@ -7,7 +6,7 @@ class Http {
    instace: AxiosInstance
    constructor() {
       this.instace = axios.create({
-         baseURL: server_url,
+         baseURL: import.meta.env.VITE_URL_API,
          timeout: 10000,
          headers: {
             'Content-Type': 'application/json',
